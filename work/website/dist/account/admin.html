@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex"><meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#101113">
+  <title>관리자 · Nephylo</title>
+  <link rel="icon" href="../assets/app-icon.svg?v=20261013-pictogram1" type="image/svg+xml">
+  <link rel="stylesheet" href="account.css?v=20261015-free-access">
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <header><a class="brand" href="../"><img src="../assets/app-icon.svg?v=20261013-pictogram1" width="30" height="30" alt="">Nephylo</a><nav aria-label="계정 메뉴"><a href="../#pricing">무료 이용</a><a href="../#download">무료 다운로드 ↗</a><select class="language-select" data-language-select aria-label="언어 선택"><option value="ko">한국어</option><option value="en">English</option></select></nav></header>
+  <main id="main">
+    <div class="heading"><p class="eyebrow">YOUR ACCOUNT</p><h1>관리자 로그인.</h1><p class="intro">일반 사용자는 로그인 없이 모든 위젯 기능을 이용합니다.<br>이 페이지는 기존 회원 정보 관리용이며 서버에서 확인한 관리자만 접근할 수 있습니다.</p></div>
+    <div id="setup-note" class="notice" role="status"><span class="status-dot"></span><div><strong id="setup-title">로그인 연결을 확인하고 있습니다.</strong><p id="setup-message">무료 사용에는 계정이 필요하지 않습니다.</p></div></div>
+    <div id="session-restore-note" class="notice" role="status" aria-live="polite" hidden><span class="status-dot"></span><div><p id="session-restore-message"></p><button type="button" id="retry-session" class="text-button" hidden disabled>로그인 상태 다시 확인</button></div></div>
+    <p id="session-storage-note" class="small" role="status" hidden></p>
+    <div class="account-grid">
+      <section class="card" id="login-card" aria-labelledby="login-title">
+        <div class="card-heading"><h2 id="login-title">내 계정으로 로그인</h2><span class="badge">PASSWORDLESS</span></div>
+        <button type="button" id="google-login" class="google-button" aria-describedby="google-note" disabled><span class="google-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg></span><span>Google로 계속하기</span></button>
+        <p id="google-note" class="small google-note">Google 로그인 연결 준비 중입니다. 연결 후 이 버튼으로 간편하게 로그인할 수 있습니다.</p>
+        <div class="login-divider"><span>또는 이메일 인증</span></div>
+        <p class="muted" id="email-note">이메일로 받은 6자리 인증번호를 10분 안에 입력하세요. 처음 인증하면 계정이 만들어집니다.</p>
+        <form id="email-form"><label for="email">이메일 주소</label><input id="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required disabled><button type="submit" id="send-code" disabled>인증번호 받기</button></form>
+        <form id="code-form" hidden><label for="code">이메일 인증번호</label><input id="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="6자리 숫자" required><button type="submit" id="verify-code">인증하고 로그인</button><div class="inline-actions"><button type="button" class="text-button" id="resend-code">다시 받기</button><button type="button" class="text-button" id="change-email">이메일 변경</button></div></form>
+        <p id="send-cooldown" class="small" hidden></p>
+        <p id="verify-cooldown" class="small" hidden></p>
+        <p id="login-message" class="message" role="status" aria-live="polite"></p>
+        <button type="button" class="text-button" id="cancel-google" hidden>Google 로그인 취소</button>
+        <p class="small">로그인만으로 관리자 권한이 생기지 않습니다. 서버에서 관리자 권한을 확인합니다.</p>
+        <div class="account-privacy-links"><a href="../privacy/">개인정보 안내</a><a href="../privacy/#delete-account">계정 삭제 요청</a></div>
+      </section>
+      <section class="card" id="member-card" aria-labelledby="member-title" hidden>
+        <div class="card-heading"><h2 id="member-title">내 계정</h2><span class="badge" id="plan-badge">Free</span></div>
+        <p id="member-email" data-i18n-ignore class="member-email"></p>
+        <dl><div><dt>이용 상태</dt><dd id="member-status">확인 중</dd></div><div><dt>Pro 이용 종료</dt><dd id="member-expiry">—</dd></div></dl>
+        <div class="inline-actions"><button type="button" id="refresh-membership">이용 권한 다시 확인</button><button type="button" id="sign-out" class="secondary">로그아웃</button></div>
+        <p id="member-message" class="message" role="status" aria-live="polite"></p>
+        <p class="small">같은 탭에서는 새로고침해도 로그인을 유지합니다. 공용 PC에서는 사용 후 로그아웃해 주세요. 위젯 사용에는 Nephylo 로그인이 필요하지 않습니다.</p>
+      </section>
+
+    </div>
+    <section id="admin-panel" class="card admin-card" aria-labelledby="admin-title" hidden>
+      <div class="card-heading"><div><p class="eyebrow">MEMBER MANAGEMENT</p><h2 id="admin-title">회원 관리</h2></div><span class="badge">ADMIN</span></div>
+      <p class="muted">이 화면은 기존 회원과 이전 버전의 이용 권한 기록을 관리합니다. 수동 Pro 변경은 1.25.20 이후 무료 위젯의 기능에 영향을 주지 않습니다. Free 변경은 이전 수동 권한만 해제하며 결제를 취소하거나 환불하지 않습니다. 변경 사유와 이전·이후 값은 서버에 기록합니다.</p>
+      <form id="search-form" class="search-form"><label for="member-search" class="sr-only">회원 이메일 검색</label><input id="member-search" type="search" maxlength="100" placeholder="이메일로 검색"><button type="submit">검색</button></form>
+      <div class="table-scroll"><table class="member-sources"><caption class="sr-only">회원의 적용 권한과 수동·결제 권한</caption><thead><tr><th>이메일</th><th>현재 적용</th><th>수동 부여</th><th>결제 이용기간</th><th>관리</th></tr></thead><tbody id="members" data-i18n-ignore></tbody></table></div>
+      <div class="inline-actions pagination"><button type="button" id="previous-page" class="secondary" disabled>이전</button><span id="page-status"></span><button type="button" id="next-page" class="secondary" disabled>다음</button></div>
+      <p id="admin-message" class="message" role="status" aria-live="polite"></p>
+      <form id="grant-form" class="grant-form" hidden>
+        <h3>수동 이용 권한 변경</h3><p id="grant-email" data-i18n-ignore></p><p id="grant-sources" class="message"></p>
+        <p class="small">이전 버전 호환용 수동 기록만 변경합니다. 최신 무료 위젯에는 적용되지 않습니다. 이전 결제 기록과 수동 권한은 별도로 보관됩니다.</p>
+        <div class="grant-fields">
+          <div><label for="grant-plan">수동 이용 권한</label><select id="grant-plan"><option id="grant-free-label" value="free">수동 Pro 없음</option><option id="grant-pro-label" value="pro">수동 Pro 부여</option></select></div>
+          <div class="grant-period">
+            <span id="grant-duration-label" class="field-label">Pro 이용기간</span>
+            <div id="grant-duration-options" class="grant-duration-options" role="group" aria-labelledby="grant-duration-label">
+              <button type="button" id="grant-duration-7" aria-pressed="false" disabled>7일</button>
+              <button type="button" id="grant-duration-30" aria-pressed="false" disabled>30일</button>
+              <button type="button" id="grant-duration-90" aria-pressed="false" disabled>90일</button>
+              <button type="button" id="grant-duration-365" aria-pressed="false" disabled>1년 (365일)</button>
+              <button type="button" id="grant-duration-custom" aria-pressed="false" disabled>직접 지정</button>
+            </div>
+            <p id="grant-duration-state" class="small grant-duration-state"></p>
+            <div id="grant-custom-date" class="grant-custom-date" hidden><label for="grant-expiry">종료 날짜 · 이 기기의 시간대</label><input id="grant-expiry" type="date" aria-describedby="grant-duration-state grant-expiry-preview" disabled></div>
+            <p id="grant-expiry-preview" class="grant-expiry-preview" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <label for="grant-reason">변경 사유</label><input id="grant-reason" maxlength="300" required placeholder="예: 테스트 이용기간 제공">
+        <div class="inline-actions"><button type="submit">변경 내용 확인</button><button type="button" class="secondary" id="cancel-grant">취소</button></div>
+        <details class="grant-history"><summary>최근 수동 권한 변경 이력</summary><p id="grant-audit" class="message" role="status"></p></details>
+      </form>
+      <div id="grant-review" class="notice" hidden><div><strong>이 내용으로 권한을 변경합니다.</strong><p id="grant-summary"></p><div class="inline-actions"><button type="button" id="confirm-grant">확인하고 적용</button><button type="button" id="back-grant" class="secondary">돌아가기</button></div></div></div>
+    </section>
+    <p class="privacy-note">회원 인증과 이용 권한 확인에 필요한 정보는 회원 서버에서 처리합니다. AI 서비스 API 키와 사용 이력은 PC에 보관합니다. 현재 카드 등록이나 실제 청구는 제공하지 않습니다.</p>
+  </main><footer><span>Nephylo · 내 작업 흐름을 위한 작은 위젯</span><nav class="account-footer-links" aria-label="하단 메뉴"><a href="../privacy/">개인정보 안내</a><a href="../privacy/#delete-account">계정 삭제 요청</a><a href="mailto:magpie0930@gmail.com">문의 ↗</a></nav></footer>
+  <script type="module" src="account.js?v=20261015-free-access"></script>
+</body>
+</html>

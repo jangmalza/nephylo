@@ -1,0 +1,30 @@
+Service icon source and attribution
+
+Source project: LobeHub / Lobe Icons
+Repository: https://github.com/lobehub/lobe-icons
+Pinned commit: c385b2b8d1f9e19aa86e628d4e23c91ee1111a47
+Source directory: packages/static-svg/icons/
+License: MIT License, Copyright (c) 2023 LobeHub
+License text: LICENSE-lobe-icons.txt
+
+Included original SVG files (unmodified):
+- codex.svg
+- elevenlabs.svg
+- openai.svg
+- claude.svg
+- gemini.svg
+- cursor.svg
+
+Each source file has viewBox="0 0 24 24", fill="currentColor", fill-rule="evenodd",
+and one path. The application adapts these paths into local WPF drawing geometry
+and applies a foreground brush. The SVG files contain no scripts, external
+references, images, fonts, filters, or network dependencies.
+
+Pinned source URL format:
+https://github.com/lobehub/lobe-icons/blob/c385b2b8d1f9e19aa86e628d4e23c91ee1111a47/packages/static-svg/icons/{filename}
+
+The marks identify their respective services. Brand names and marks belong to
+their respective owners. Inclusion does not imply endorsement or affiliation.
+
+higgsfield.svg: Original geometric H monogram created for Usage Widget, 2026.
+Used for Higgsfield web and API entries; not an official Higgsfield logo.

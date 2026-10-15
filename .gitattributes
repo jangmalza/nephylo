@@ -1,0 +1,19 @@
+* text=auto
+*.cs text eol=crlf
+*.ps1 text eol=crlf
+# Public download bytes are pinned/verified; preserve their canonical LF form.
+/work/website/dist/downloads/install-nephylo.ps1 text eol=lf
+/work/website/dist/downloads/SHA256SUMS.txt text eol=lf
+*.config text eol=crlf
+*.manifest text eol=crlf
+*.md text eol=lf
+*.svg text eol=lf
+*.sh text eol=lf
+*.conf text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.sql text eol=lf
+*.toml text eol=lf

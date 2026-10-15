@@ -1,0 +1,15 @@
+.sites-runtime/
+.openai/
+.sites-checkout/
+.sites-checkout-*/
+node_modules/
+*.log
+*.tmp
+.env
+.env.*
+!.env.example
+
+# Public deployment artifacts are checked together with their signed manifests.
+# Keep these explicit exceptions scoped to the website download directory.
+!/dist/downloads/*.exe
+!/dist/downloads/*.zip

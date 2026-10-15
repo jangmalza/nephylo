@@ -1,0 +1,15 @@
+{
+  "name": "usage-widget-membership-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/free-distribution.test.mjs && node tests/membership.test.mjs && node tests/admin-sources.test.mjs && npm run test:billing && npm run test:international",
+    "test:admin": "node tests/admin-sources.test.mjs",
+    "test:billing": "node tests/billing.test.mjs && node tests/billing-functions.test.mjs && node tests/billing-functions-integration.test.mjs",
+    "test:international": "node tests/international-billing.test.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.3.14"
+  },
+  "license": "MIT"
+}

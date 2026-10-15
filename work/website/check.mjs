@@ -1,0 +1,137 @@
+import {readFile, access} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {verifySignedUpdate} from './verify-signed-update.mjs';
+const root = path.dirname(fileURLToPath(import.meta.url));
+const dist = path.join(root, 'dist');
+const html = await readFile(path.join(dist, 'index.html'), 'utf8');
+const pricing = html.match(/<section[^>]+id="pricing"[\s\S]*?<\/section>/)?.[0];
+assert.ok(pricing, 'Pricing section must be present');
+assert.ok(pricing.includes('0<span>원</span>'), 'All widget features must be offered at no charge');
+assert.ok(!/3,000|결제 출시|Pro 전용|account\/#billing/.test(pricing), 'Pricing must not advertise paid access');
+assert.ok(pricing.includes('지원 서비스 등록 <strong>무제한</strong>'), 'Unlimited registration must be scoped to supported services');
+const freeCard = pricing.match(/<article class="price-card"[\s\S]*?<\/article>/)?.[0];
+assert.ok(freeCard?.includes('잔량 부족 · 초기화 예정 알림') && freeCard.includes('30일 사용 이력 · CSV 내보내기') && freeCard.includes('다크 · 라이트 테마'), 'Alerts, history, CSV and theme choice must all be free');
+assert.ok(freeCard.includes('하루 평균 사용량') && freeCard.includes('주간 요약') && freeCard.includes('미니바'), 'Insights, summaries and minibar must be included');
+assert.ok(html.includes('다크 · 라이트 모두 무료'), 'Interactive themes must not imply paid access');
+assert.match(html, /id="menu-toggle"[^>]*aria-controls="site-navigation"/, 'Compact navigation must control the primary links');
+assert.match(html, /id="widget-demo"[^>]*data-theme="dark"/, 'Default preview keeps the dark theme');
+assert.doesNotMatch(html, /data-demo-plan|id="demo-extra-service" hidden|id="demo-theme-controls" hidden/, 'All services and theme controls must be usable without a plan toggle');
+assert.ok(html.includes('https://nephylo.com/') && !html.includes('https://usage-widget-hyeonwo-o.hyeonwo-o.chatgpt.site'), 'Homepage must use the custom canonical domain');
+assert.match(html, /property="og:image" content="https:\/\/nephylo.com\/assets\/share-card.png/, 'Link previews must use the local share image');
+const shareCard = await readFile(path.join(dist, 'assets/share-card.png'));
+assert.equal(shareCard.readUInt32BE(16), 1200);
+assert.equal(shareCard.readUInt32BE(20), 630);
+await access(path.join(dist, 'robots.txt'));
+await access(path.join(dist, 'sitemap.xml'));
+const localLinks = [...html.matchAll(/(?:href|src)="([^"]+)"/g)].map(match => match[1]).filter(link => !link.startsWith('#') && !/^(https?:|mailto:)/.test(link));
+for (const link of new Set(localLinks)) await access(path.join(dist, link.split('#')[0].split('?')[0]));
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(new Set(ids).size, ids.length, 'HTML IDs must be unique');
+for (const match of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.includes(match[1]), `Missing anchor ${match[1]}`);
+for (const script of ['app.js','powershell-install.js','guides.js','guides-en.js','i18n.js','main-translations.js','account/free-access.js','account/account-translations.js','account/localization.js','account/account.js','account/admin-members.js','account/membership-api.js','account/billing-model.js','account/billing-ui.js','account/international-billing-model.js','account/international-billing-ui.js','account/payments-ui.js','account/google-auth.js','account/google-callback/callback.js']) {
+  const syntax = spawnSync(process.execPath, ['--check', path.join(dist, script)], {encoding:'utf8'});
+  assert.equal(syntax.status, 0, syntax.stderr);
+}
+const i18nChecks = spawnSync(process.execPath, [path.join(root, 'i18n-tests.mjs')], {encoding:'utf8'});
+assert.equal(i18nChecks.status, 0, i18nChecks.stderr);
+console.log(i18nChecks.stdout.trim());
+const freeChecks = spawnSync(process.execPath, [path.join(root, 'free-access-tests.mjs')], {encoding:'utf8'});
+assert.equal(freeChecks.status, 0, freeChecks.stderr);
+console.log(freeChecks.stdout.trim());
+const accountLanguageChecks = spawnSync(process.execPath, [path.join(root, 'account-language-tests.mjs')], {encoding:'utf8'});
+assert.equal(accountLanguageChecks.status, 0, accountLanguageChecks.stderr);
+console.log(accountLanguageChecks.stdout.trim());
+const accountChecks = spawnSync(process.execPath, [path.join(root, 'account-tests.mjs')], {encoding:'utf8'});
+assert.equal(accountChecks.status, 0, accountChecks.stderr);
+console.log(accountChecks.stdout.trim());
+for (const suite of ['session-persistence-tests.mjs','session-restore-ui-tests.mjs']) {
+  const sessionChecks = spawnSync(process.execPath, [path.join(root, suite)], {encoding:'utf8',timeout:30000});
+  assert.equal(sessionChecks.status, 0, sessionChecks.stderr || sessionChecks.error?.message);
+  console.log(sessionChecks.stdout.trim());
+}
+const adminChecks = spawnSync(process.execPath, [path.join(root, 'admin-members-tests.mjs')], {encoding:'utf8'});
+assert.equal(adminChecks.status, 0, adminChecks.stderr);
+console.log(adminChecks.stdout.trim());
+const billingChecks = spawnSync(process.execPath, [path.join(root, 'billing-tests.mjs')], {encoding:'utf8'});
+assert.equal(billingChecks.status, 0, billingChecks.stderr);
+console.log(billingChecks.stdout.trim());
+const billingUiChecks = spawnSync(process.execPath, [path.join(root, 'billing-ui-tests.mjs')], {encoding:'utf8'});
+assert.equal(billingUiChecks.status, 0, billingUiChecks.stderr);
+console.log(billingUiChecks.stdout.trim());
+const internationalChecks = spawnSync(process.execPath, [path.join(root, 'international-billing-tests.mjs')], {encoding:'utf8'});
+assert.equal(internationalChecks.status, 0, internationalChecks.stderr);
+console.log(internationalChecks.stdout.trim());
+const googleChecks = spawnSync(process.execPath, [path.join(root, 'google-login-tests.mjs')], {encoding:'utf8'});
+assert.equal(googleChecks.status, 0, googleChecks.stderr);
+console.log(googleChecks.stdout.trim());
+const signedChecks = spawnSync(process.execPath, [path.join(root, 'signed-update-tests.mjs')], {encoding:'utf8'});
+assert.equal(signedChecks.status, 0, signedChecks.stderr);
+console.log(signedChecks.stdout.trim());
+const powershellUiChecks = spawnSync(process.execPath, [path.join(root, 'powershell-install-ui-tests.mjs')], {encoding:'utf8'});
+assert.equal(powershellUiChecks.status, 0, powershellUiChecks.stderr);
+console.log(powershellUiChecks.stdout.trim());
+await access(path.join(dist,'account/google-callback/index.html'));
+const release = JSON.parse(await readFile(path.join(dist, 'downloads/release.json'), 'utf8'));
+assert.match(release.version, /^(0|[1-9][0-9]{0,4})\.(0|[1-9][0-9]{0,4})\.(0|[1-9][0-9]{0,4})$/, 'Version must be canonical before constructing a download path');
+const displayedVersions = [...html.matchAll(/<p class="download-meta">v(\d+\.\d+\.\d+)\b/g)].map(match => match[1]);
+assert.deepEqual(displayedVersions, [release.version, release.version], 'Both download labels must display the release manifest version');
+const latestNote = html.match(/<div class="release-notes">\s*<details\b[^>]*>([\s\S]*?)<\/details>/)?.[1];
+assert.ok(latestNote, 'Latest release note must be present');
+assert.equal(latestNote.match(/<b>v(\d+\.\d+\.\d+)<\/b>/)?.[1], release.version, 'Latest release note must match the release manifest version');
+assert.equal(latestNote.match(/<time datetime="([^"]+)"/)?.[1], release.released, 'Latest release note date must match the release manifest');
+assert.equal(release.file, `UsageWidget-v${release.version}-Windows11.zip`, 'Portable ZIP version must match the release manifest');
+assert.ok(html.includes(`download="Nephylo-v${release.version}-Windows.zip"`), 'Portable download filename must use the release manifest version');
+const modulePreloads = new Set([...html.matchAll(/<link rel="modulepreload" href="([^"]+)"/g)].map(match => match[1]));
+const entryScript = html.match(/<script type="module" src="([^"]+)"/)?.[1];
+assert.ok(entryScript && modulePreloads.has(entryScript), 'Homepage module preload must match its entry script cache key');
+const appCode = await readFile(path.join(dist, 'app.js'), 'utf8');
+for (const dependency of appCode.matchAll(/^import\s+.+?\s+from\s+['"]\.\/([^'"]+)['"]/gm)) {
+  assert.ok(modulePreloads.has(dependency[1]), `Homepage preload must match imported module cache key: ${dependency[1]}`);
+}
+const zip = await readFile(path.join(dist, 'downloads', release.file));
+assert.equal(zip.length, release.bytes, 'Download size mismatch');
+assert.equal(createHash('sha256').update(zip).digest('hex'), release.sha256, 'Download hash mismatch');
+assert.equal(zip.readUInt32LE(0), 0x04034b50, 'Download must be a ZIP');
+assert.ok(html.includes(`downloads/${release.file}`), 'Download links must match release');
+assert.match(release.file, /^UsageWidget-v[\d.]+-Windows11\.zip$/, 'Legacy manifest fields must retain the portable ZIP for existing widgets');
+assert.equal(release.installer.file, 'Nephylo-Setup.exe', 'Primary installer must keep a simple download name');
+const installer = await readFile(path.join(dist, 'downloads', release.installer.file));
+assert.equal(installer.length, release.installer.bytes, 'Installer size mismatch');
+assert.equal(createHash('sha256').update(installer).digest('hex'), release.installer.sha256, 'Installer hash mismatch');
+const signedInstaller = await readFile(path.join(dist, 'downloads', `Nephylo-Setup-${release.version}.exe`));
+assert.ok(signedInstaller.equals(installer), 'Immutable signed installer must be byte-for-byte identical to the stable manual download');
+verifySignedUpdate(await readFile(path.join(dist, 'downloads/update.json'), 'utf8'), await readFile(path.join(root, '../assets/update-signing-public.xml'), 'utf8'), signedInstaller, release);
+assert.ok(installer.length >= 64, 'Installer DOS header must be present');
+assert.equal(installer.readUInt16LE(0), 0x5a4d, 'Installer must have an MZ header');
+const peOffset = installer.readUInt32LE(0x3c);
+assert.ok(peOffset >= 64 && peOffset <= installer.length - 4, 'Installer PE header offset must be valid');
+assert.equal(installer.readUInt32LE(peOffset), 0x00004550, 'Installer must have a PE signature');
+const primaryDownloads = [...html.matchAll(/<a\b[^>]*class="[^"]*\bdownload-link\b[^"]*"[^>]*>/g)].map(match => match[0]);
+assert.equal(primaryDownloads.length, 4, 'All four primary download buttons must remain available');
+for (const link of primaryDownloads) {
+  assert.ok(link.includes('href="downloads/Nephylo-Setup.exe"'), 'Primary buttons must download the installer');
+  assert.ok(link.includes('download="Nephylo-Setup.exe"'), 'Primary download filename must match the installer');
+}
+assert.ok(html.includes('magpie0930@gmail.com'), 'Contact must use the provided address');
+const guideCode = await readFile(path.join(dist,'guides.js'),'utf8');
+const {serviceGuides, faqItems} = await import(`data:text/javascript;base64,${Buffer.from(guideCode).toString('base64')}`);
+assert.equal(serviceGuides.length, 8);
+assert.equal(faqItems.length, 23);
+assert.ok(serviceGuides.filter(item => ['gemini','cursor'].includes(item.id)).every(item => item.method === '수동 기록'));
+const higgsfieldWeb = serviceGuides.find(item => item.id === 'higgsfield');
+const higgsfieldApi = serviceGuides.find(item => item.id === 'higgsfield-api');
+assert.equal(higgsfieldWeb.method, 'CLI 자동 조회');
+assert.equal(higgsfieldApi.method, 'USD 수동 기록');
+assert.ok(higgsfieldApi.summary.includes('자동 연결은 제공하지 않습니다') && higgsfieldApi.summary.includes('API 키를 입력할 필요가 없습니다'), 'API guide must not imply an automatic balance API');
+assert.equal([...html.matchAll(/class="service-link"/g)].length, 8, 'All eight supported entries must be discoverable');
+for (const guide of serviceGuides) {
+  assert.equal(guide.steps.length, 3);
+  assert.equal(new URL(guide.docsUrl).protocol, 'https:');
+}
+// Lightsail deploys this explicit dist directory. Legacy local Sites metadata
+// is not a dependency of a fresh repository checkout or production validation.
+console.log(`PASS: accountless free access, ${new Set(localLinks).size} assets, ${ids.length} anchors, ${serviceGuides.length} guides, ${faqItems.length} FAQs, installer ${release.version} (${release.installer.bytes} bytes, MZ/PE), portable ZIP (${release.bytes} bytes), syntax and SHA-256.`);

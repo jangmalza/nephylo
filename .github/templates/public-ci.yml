@@ -1,0 +1,137 @@
+name: Nephylo Source CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: nephylo-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secret-check:
+    name: Secrets and private data
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install pinned secret scanner
+        run: |
+          set -euo pipefail
+          scanner_dir="$RUNNER_TEMP/nephylo-gitleaks"
+          mkdir -p "$scanner_dir"
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+            'https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz' -o "$scanner_dir/scanner.tar.gz"
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $scanner_dir/scanner.tar.gz" | sha256sum --check --strict
+          tar -xzf "$scanner_dir/scanner.tar.gz" -C "$scanner_dir"
+          echo "GITLEAKS_BINARY=$scanner_dir/gitleaks" >> "$GITHUB_ENV"
+      - name: Verify scanner exceptions and scan history plus current files
+        run: |
+          node --test .github/scripts/secret-policy.test.mjs
+          node .github/scripts/scan-secrets.mjs
+      - name: Save redacted scan summary
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-secrets-${{ github.run_id }}-${{ github.run_attempt }}
+          path: outputs/ci/secrets/summary.json
+          if-no-files-found: error
+          retention-days: 7
+
+  site-check:
+    name: Public source layout and scripts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '22'
+      - run: node scripts/check-public-source.mjs
+
+  widget-check:
+    name: Windows development build and regressions
+    runs-on: windows-2022
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check build and isolated Windows regressions
+        run: .\work\tests\run-ci-tests.ps1
+      - name: Save Windows diagnostics and development build
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-windows-development-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            outputs/ci/windows/*.log
+            outputs/ci/windows/summary.json
+            outputs/ci/windows/development-build/UsageWidget.exe
+            outputs/ci/windows/development-build/UsageWidget.exe.config
+            outputs/ci/windows/development-build/widget.ico
+          if-no-files-found: error
+          retention-days: 7
+
+  membership-check:
+    name: Membership server in isolated fixtures
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install locked test dependencies and check server fixtures
+        run: node .github/scripts/run-node-checks.mjs membership
+      - name: Save membership diagnostics
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-membership-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            outputs/ci/membership/*.log
+            outputs/ci/membership/summary.json
+          if-no-files-found: error
+          retention-days: 7
+
+  ci-result:
+    name: ci-result
+    runs-on: ubuntu-24.04
+    needs: [site-check, widget-check, membership-check, secret-check]
+    if: ${{ always() }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Require every check to succeed
+        env:
+          CI_JOB_RESULTS: ${{ toJSON(needs) }}
+        run: node .github/scripts/check-ci-result.mjs

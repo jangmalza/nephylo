@@ -1,0 +1,18 @@
+$ErrorActionPreference = 'Stop'
+$sourceDirectory = Join-Path (Split-Path -Parent $PSScriptRoot) 'src'
+$testExecutable = Join-Path $PSScriptRoot 'compact-auto-integration-tests.exe'
+$frameworkDirectory = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
+$compiler = Join-Path $frameworkDirectory 'csc.exe'
+$arguments = @('/nologo','/warn:4','/langversion:5','/target:exe','/main:CompactAutoIntegrationTests','/utf8output',('/out:' + $testExecutable))
+foreach ($reference in @('System.dll','System.Core.dll','System.Web.Extensions.dll','System.Security.dll','System.Net.Http.dll','System.Drawing.dll','System.Windows.Forms.dll','System.Xaml.dll')) {
+    $arguments += '/reference:' + (Join-Path $frameworkDirectory $reference)
+}
+foreach ($reference in @('PresentationFramework.dll','PresentationCore.dll','WindowsBase.dll')) {
+    $arguments += '/reference:' + (Join-Path $frameworkDirectory ('WPF\' + $reference))
+}
+$arguments += @(Get-ChildItem -LiteralPath $sourceDirectory -Filter '*.cs' | ForEach-Object { $_.FullName })
+$arguments += Join-Path $PSScriptRoot 'compact-auto-integration-tests.cs'
+& $compiler @arguments
+if ($LASTEXITCODE -ne 0) { throw 'Compact auto integration tests did not compile.' }
+& $testExecutable
+if ($LASTEXITCODE -ne 0) { throw 'Compact auto integration tests failed.' }

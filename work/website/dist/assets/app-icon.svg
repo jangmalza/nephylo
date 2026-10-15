@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Nephylo</title>
+  <desc>A minimal remaining-capacity pictogram: a half-filled circular vessel, in white on a black rounded tile.</desc>
+  <rect x="0" y="0" width="64" height="64" rx="16" fill="#111111"/>
+  <circle cx="32" cy="32" r="22" fill="#FFFFFF"/>
+  <circle cx="32" cy="32" r="14" fill="#111111"/>
+  <rect x="18" y="32" width="28" height="16" fill="#FFFFFF"/>
+</svg>

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "limits": {
+    "smtp_max_frequency": 60,
+    "mailer_otp_exp": 600,
+    "mailer_otp_length": 6,
+    "rate_limit_otp": 10,
+    "rate_limit_verify": 20,
+    "rate_limit_email_sent": 100
+  }
+}

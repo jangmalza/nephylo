@@ -1,0 +1,36 @@
+title = "Nephylo: default detectors with reviewed synthetic values only"
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public Supabase client identifier, never a service-role/secret key"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^work/website/dist/account/config\.json$''']
+regexes = ['''^sb_publishable_[A-Za-z0-9_-]+$''']
+
+[[allowlists]]
+description = "Exact synthetic billing fixture values; real keys in tests still fail"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = [
+  '''^work/membership/tests/billing-functions(?:-integration)?\.test\.mjs$''',
+  '''^work/website/(?:billing-tests|billing-ui-tests|account-language-tests|international-billing-tests)\.mjs$'''
+]
+regexes = [
+  '''^(?:test_ck_abcdefgh12345678|test_sk_abcdefgh12345678|test_sk_serversecret12345678|live_sk_abcdefgh12345678|cron-secret-12345678901234567890123456|scheduler-secret-12345678901234567890123456|test_ck_fixture123|sb_publishable_fixture_only|sb_publishable_fixture|sb_publishable_fixture123)$'''
+]
+
+[[allowlists]]
+description = "Known rejection-test sentinel; not an operational secret"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^\.github/scripts/site-bundle\.test\.mjs$''']
+regexes = ['''^sb_secret_forbidden123$''']
+
+[[allowlists]]
+description = "The scanner regression test's exact synthetic baseline"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^\.github/scripts/secret-policy\.test\.mjs$''']
+regexes = ['''^test_ck_fixture123$''']
