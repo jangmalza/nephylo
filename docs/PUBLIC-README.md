@@ -14,7 +14,7 @@
 
 ## 설치하고 시작하기
 
-1. **[Nephylo-Setup.exe](https://nephylo.com/downloads/Nephylo-Setup.exe)**를 다운로드해 실행합니다. 압축 해제나 개발 도구 설치는 필요하지 않습니다.
+1. [Nephylo-Setup.exe](https://nephylo.com/downloads/Nephylo-Setup.exe)를 다운로드해 실행합니다. 압축 해제나 개발 도구 설치는 필요하지 않습니다.
 2. 위젯의 **＋ → 서비스 연결 · 관리**에서 사용할 AI 서비스를 연결합니다.
 3. 잔여량을 확인하세요. **… → 대시보드 열기**에서 전체 현황을, **… → 간략 보기**에서 미니바를 사용할 수 있습니다.
 
