@@ -2,7 +2,7 @@
 
 [Website](https://nephylo.com/) · [Source](https://github.com/jangmalza/nephylo) · [MIT License](LICENSE)
 
-A free, open-source Windows widget for AI service usage, remaining quotas and reset times. Built with C# / WPF / .NET Framework 4.8. Current source version: **1.25.21**. No Nephylo account or subscription is required; provider authentication and fees are separate.
+A free, open-source Windows widget for AI service usage, remaining quotas and reset times. Built with C# / WPF / .NET Framework 4.8. Current source version: **{{SOURCE_VERSION}}**. No Nephylo account or subscription is required; provider authentication and fees are separate.
 
 Public source updates are automatically synchronized from a checked snapshot. Private deployment records, account settings and Git history are excluded.
 

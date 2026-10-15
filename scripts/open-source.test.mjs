@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {publicSourcePath,prepareOpenSource} from './prepare-open-source.mjs';
+import {publicSourcePath,prepareOpenSource,exclusionReason} from './prepare-open-source.mjs';
 import {mkdirSync,mkdtempSync,writeFileSync,readFileSync,existsSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
@@ -32,9 +32,27 @@ test('export neutralizes account configuration and refuses an existing output',(
   execFileSync('git',['add','.'],{cwd:repo,stdio:'pipe',windowsHide:true});execFileSync('git',['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture'],{cwd:repo,stdio:'pipe',windowsHide:true});
   const result=prepareOpenSource({repository:repo,output:'outputs/open-source/result'});
   assert.equal(readFileSync(path.join(result.directory,'README.md'),'utf8'),'# Public source 1.25.21\n');
+  assert.equal(readFileSync(path.join(result.directory,'docs/PUBLIC-README.md'),'utf8'),'# Public source {{SOURCE_VERSION}}\n');
   assert.equal(readFileSync(path.join(result.directory,'work/website/dist/account/config.json'),'utf8'),empty);
   assert.ok(!existsSync(path.join(result.directory,'.git')));assert.ok(!existsSync(path.join(result.directory,'docs/releases/private.json')));
   assert.ok(!existsSync(path.join(result.directory,'work/website/dist/downloads/Nephylo-Setup.exe')));
   assert.throws(()=>prepareOpenSource({repository:repo,output:'outputs/open-source/result'}),/overwrite/);
   assert.throws(()=>prepareOpenSource({repository:repo,output:'../outside'}),/child/);
+  // Exported templates must support a second generation with a changed app version.
+  execFileSync('git',['init','-q'],{cwd:result.directory,stdio:'pipe',windowsHide:true});
+  writeFileSync(path.join(result.directory,'work/src/AssemblyInfo.cs'),'[assembly: AssemblyFileVersion("1.25.22.0")]');
+  execFileSync('git',['add','.'],{cwd:result.directory,stdio:'pipe',windowsHide:true});
+  execFileSync('git',['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture'],{cwd:result.directory,stdio:'pipe',windowsHide:true});
+  const second=prepareOpenSource({repository:result.directory,output:'outputs/open-source/second'});
+  assert.equal(readFileSync(path.join(second.directory,'README.md'),'utf8'),'# Public source 1.25.22\n');
+  assert.equal(readFileSync(path.join(second.directory,'docs/PUBLIC-README.md'),'utf8'),'# Public source {{SOURCE_VERSION}}\n');
+  write('work/tests/fixtures/new-data.json','{}');
+  assert.throws(()=>prepareOpenSource({repository:repo,output:'outputs/open-source/rejected'}),error=>error.exclusions.some(x=>x.path==='work/tests/fixtures/new-data.json'&&x.reason==='unclassified-source'));
+  assert.ok(!existsSync(path.join(repo,'outputs/open-source/rejected')),'Unknown files fail before a snapshot is written');
+});
+
+test('unknown source formats fail explicitly while private data remain excluded',()=>{
+ for(const name of ['work/src/View.xaml','work/assets/prices.json','work/tests/fixture.json','work/new-helper.ps1','package.json','resources/NewView.resx'])assert.equal(exclusionReason(name),'unclassified-source');
+ for(const name of ['work/tests/auth.json','outputs/backup.json','work/website/dist/downloads/Nephylo-Setup.exe'])assert.equal(exclusionReason(name),'private-or-generated');
+ for(const name of ['work/configure-membership.ps1','work/package-release.ps1'])assert.equal(exclusionReason(name),'operational-or-private-document');
 });

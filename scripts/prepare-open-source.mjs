@@ -9,6 +9,7 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 const top=new Set(['LICENSE','THIRD-PARTY-NOTICES.txt','CONTRIBUTING.md','.gitattributes','.gitignore','.gitleaks.toml']);
 const githubScripts=new Set(['scan-secrets.mjs','secret-policy.test.mjs','check-ci-result.mjs','run-node-checks.mjs']);
 const workFiles=new Set(['build.ps1','build-setup.ps1','compose-notices.ps1','generate-app-icon.ps1','generate-service-icons.ps1','Install.cmd','sign-release.ps1','README.txt','UPDATE-RELEASES.md']);
+const operationalHelpers=new Set(['work/configure-membership.ps1','work/package-release.ps1']);
 const publicDocs=new Map([['docs/public/RELEASING.md','docs/RELEASING.md'],['docs/public/UPDATE-RELEASES.md','work/UPDATE-RELEASES.md'],['docs/public/WEBSITE.md','work/website/README.md'],['docs/public/MEMBERSHIP.md','work/membership/README.md']]);
 const jsonFiles=new Set(['work/membership/client-config.example.json','work/membership/package.json','work/membership/package-lock.json','work/membership/setup/auth-rate-limit-policy.v1.json','work/website/account-config.example.json','work/website/dist/account/config.json','work/website/dist/downloads/release.json','work/website/dist/downloads/update.json']);
 export function publicSourcePath(name){
@@ -33,6 +34,13 @@ export function publicSourcePath(name){
   if(name.startsWith('work/website/'))return jsonFiles.has(name)||/\.(mjs|js|css|html|svg|png|ico|xml|txt|ps1)$/.test(name)||name==='work/website/README.md'||name==='work/website/.gitignore';
   return false;
 }
+export function exclusionReason(name){
+  if(publicSourcePath(name))return null;
+  if(privatePath(name)||/\.(exe|dll|pdb|zip|dpapi|pem|pfx|p12|log|dat)$/i.test(name)||/(?:^|\/)(?:node_modules|outputs|\.git|\.temp|\.branches)(?:\/|$)/.test(name))return 'private-or-generated';
+  if(operationalHelpers.has(name)||(name.startsWith('work/membership/')&&name.endsWith('.md'))||name.startsWith('migration/')||name.startsWith('.github/')||name.startsWith('docs/'))return 'operational-or-private-document';
+  if(['README.md','CHANGELOG.md','source-manifest.json','public-sync.json'].includes(name))return 'replaced-or-generated-document';
+  return 'unclassified-source';
+}
 function regularFile(repository,name){
   const resolved=path.resolve(repository,name);let p=resolved;
   assert.ok(resolved.startsWith(path.resolve(repository)+path.sep),'Source escaped workspace');
@@ -47,6 +55,10 @@ export function prepareOpenSource({repository=root,output}={}){
   let ancestor=path.dirname(destination);while(ancestor!==path.resolve(repository)){if(existsSync(ancestor))assert.ok(!lstatSync(ancestor).isSymbolicLink(),'Export parent symlink refused');ancestor=path.dirname(ancestor);}
   const git=args=>execFileSync('git',args,{cwd:repository,encoding:'utf8',windowsHide:true});
   const names=[...new Set(git(['ls-files','--cached','--others','--exclude-standard','-z']).split('\0').filter(Boolean))];
+  const excluded=names.filter(name=>!publicSourcePath(name)).map(name=>({path:name,reason:exclusionReason(name)}));
+  if(excluded.some(item=>item.reason==='unclassified-source')){
+    const error=new Error('Unclassified source files require explicit public-export review');error.exclusions=excluded;throw error;
+  }
   const files=new Map();
   for(const name of names.filter(publicSourcePath))files.set(name,readFileSync(regularFile(repository,name)));
   const version=files.get('work/src/AssemblyInfo.cs')?.toString('utf8').match(/AssemblyFileVersion\("(\d+\.\d+\.\d+)\.0"\)/)?.[1];
@@ -64,7 +76,8 @@ export function prepareOpenSource({repository=root,output}={}){
   for(const [template,target] of publicDocs)files.set(target,files.get(template));
   files.set('.github/workflows/ci.yml',files.get('.github/templates/public-ci.yml'));
   files.set('work/website/dist/account/config.json',files.get('work/website/account-config.example.json'));
-  for(const [name,bytes]of files)if(name.endsWith('.md')||name==='work/README.txt')files.set(name,Buffer.from(bytes.toString('utf8').replaceAll('{{SOURCE_VERSION}}',version)));
+  // Reusable templates remain intact so a public fork can export a later version again.
+  for(const name of ['README.md','work/README.txt',...publicDocs.values()])files.set(name,Buffer.from(files.get(name).toString('utf8').replaceAll('{{SOURCE_VERSION}}',version)));
   // Developer snapshots deliberately contain neither Git history nor releases.
   // The current official update verification public key is public, not a secret.
   const inventory=[];
@@ -75,7 +88,7 @@ export function prepareOpenSource({repository=root,output}={}){
   const result={format:1,sourceCommit:git(['rev-parse','HEAD']).trim(),includesWorkingTreeChanges:!!git(['status','--porcelain']).trim(),
     gitHistoryIncluded:false,releaseBinariesIncluded:false,productionAccountConfigIncluded:false,files:inventory};
   writeFileSync(path.join(destination,'source-manifest.json'),JSON.stringify(result,null,2)+'\n');
-  return {directory:destination,fileCount:inventory.length,manifest:result};
+  return {directory:destination,fileCount:inventory.length,manifest:result,excluded};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   try{const result=prepareOpenSource({output:process.argv[2]});console.log(JSON.stringify({directory:result.directory,fileCount:result.fileCount,productionConfig:false,gitHistory:false}));}
