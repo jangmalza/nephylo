@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "sourceCommit": "c3b58a7458c29c0f5e1344c16e4dcddc5232d7ba",
+  "sourceCommit": "de83996991a9ada53b009e147df47289682650f4",
   "includesWorkingTreeChanges": false,
   "gitHistoryIncluded": false,
   "releaseBinariesIncluded": false,
@@ -57,6 +57,26 @@
       "sha256": "ba1546b4793c609d2133fee540955e29135389a3d071fcf0b93dc9cfc739fa28"
     },
     {
+      "path": "docs/images/dashboard.png",
+      "bytes": 280793,
+      "sha256": "3b94363c38e9c4324df1ee54282049804d3eb151b2eb951245c81a49d0ca7b2a"
+    },
+    {
+      "path": "docs/images/history.png",
+      "bytes": 212603,
+      "sha256": "1ba7ac00e3d321f6d2e26adaf44fa77388857478fe3b52ee414d5f8377ee2c4d"
+    },
+    {
+      "path": "docs/images/minibar.png",
+      "bytes": 17755,
+      "sha256": "7dd9699314677a43ebdbfd6d04675df56a5407bbfde1e98c0c0f69e108597ff4"
+    },
+    {
+      "path": "docs/images/widget.png",
+      "bytes": 67685,
+      "sha256": "be601c43ef7043aa66ee97a10ea7c521a70baee3eab947e78451258718351300"
+    },
+    {
       "path": "docs/LICENSES.md",
       "bytes": 2255,
       "sha256": "b3eb5d38c83a196ff316c1b121cb2b7a3cc621b16f3fb5ed86fc03bfe29a4531"
@@ -68,8 +88,8 @@
     },
     {
       "path": "docs/PUBLIC-README.md",
-      "bytes": 3256,
-      "sha256": "231f6c93bf9047f95b935453e8c9ffc7a2df90511436d0379f7a89683a24092f"
+      "bytes": 9854,
+      "sha256": "fbf7afe9f916f9192f7983c924aaedbaae34061c26e150f5cf41013f14ae1a77"
     },
     {
       "path": "docs/public/MEMBERSHIP.md",
@@ -103,13 +123,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 3245,
-      "sha256": "b14469e6a640d6d63cdf269d4df40c9a3784897675c4a93a627dc2f20121532d"
+      "bytes": 9843,
+      "sha256": "bfc9c8cd4fb41408e2958f137a7214f8bd5a96244e20a51e8bceb90b22c72388"
     },
     {
       "path": "scripts/check-public-source.mjs",
-      "bytes": 1681,
-      "sha256": "d9d143450e882f3792c37b4cb62b42d0df57e1ebd6bcaa2fd1987f20164448f7"
+      "bytes": 2401,
+      "sha256": "8fe77cf113409a3e372708704d77e89d644c76533e353a3598a6ced79dda73dc"
     },
     {
       "path": "scripts/configure-account.mjs",
@@ -118,13 +138,13 @@
     },
     {
       "path": "scripts/open-source.test.mjs",
-      "bytes": 6450,
-      "sha256": "09aa1c2a8a0b3141223d209310e882dcb20dbe61e05149f65651129bd8b3a980"
+      "bytes": 6726,
+      "sha256": "87b7c3271f80a37137f6c53c39d327547bb947fcb163f84479d959db49a6e2a4"
     },
     {
       "path": "scripts/prepare-open-source.mjs",
-      "bytes": 8866,
-      "sha256": "91f94837271e7713c2537208b85ae57f11558152368e4a7beadb702f4b86a244"
+      "bytes": 9043,
+      "sha256": "91cff85d23b5ca6d5ae2d28787feb6a681b290713eda3678b73a3775115d3a6e"
     },
     {
       "path": "THIRD-PARTY-NOTICES.txt",
@@ -418,8 +438,8 @@
     },
     {
       "path": "work/README.txt",
-      "bytes": 3245,
-      "sha256": "b14469e6a640d6d63cdf269d4df40c9a3784897675c4a93a627dc2f20121532d"
+      "bytes": 9843,
+      "sha256": "bfc9c8cd4fb41408e2958f137a7214f8bd5a96244e20a51e8bceb90b22c72388"
     },
     {
       "path": "work/sign-release.ps1",

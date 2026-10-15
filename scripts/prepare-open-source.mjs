@@ -10,6 +10,7 @@ const top=new Set(['LICENSE','THIRD-PARTY-NOTICES.txt','CONTRIBUTING.md','.gitat
 const githubScripts=new Set(['scan-secrets.mjs','secret-policy.test.mjs','check-ci-result.mjs','run-node-checks.mjs']);
 const workFiles=new Set(['build.ps1','build-setup.ps1','compose-notices.ps1','generate-app-icon.ps1','generate-service-icons.ps1','Install.cmd','sign-release.ps1','README.txt','UPDATE-RELEASES.md']);
 const operationalHelpers=new Set(['work/configure-membership.ps1','work/package-release.ps1']);
+const publicImages=new Set(['docs/images/widget.png','docs/images/minibar.png','docs/images/dashboard.png','docs/images/history.png']);
 const publicDocs=new Map([['docs/public/RELEASING.md','docs/RELEASING.md'],['docs/public/UPDATE-RELEASES.md','work/UPDATE-RELEASES.md'],['docs/public/WEBSITE.md','work/website/README.md'],['docs/public/MEMBERSHIP.md','work/membership/README.md']]);
 const jsonFiles=new Set(['work/membership/client-config.example.json','work/membership/package.json','work/membership/package-lock.json','work/membership/setup/auth-rate-limit-policy.v1.json','work/website/account-config.example.json','work/website/dist/account/config.json','work/website/dist/downloads/release.json','work/website/dist/downloads/update.json']);
 export function publicSourcePath(name){
@@ -20,6 +21,7 @@ export function publicSourcePath(name){
   if(/(?:^|\/)(?:client-config\.json|account-config\.local\.json|auth\.json|settings\.json|usage-journal\.json)$/.test(name))return false;
   if(/(?:^|\/)\.env(?:\..*)?$/.test(name)&&!name.endsWith('/.env.example'))return false;
   if(top.has(name))return true;
+  if(publicImages.has(name))return true;
   if(/^docs\/(?:OPEN-SOURCE|PUBLIC-README|LICENSES)\.md$/.test(name))return true;
   if(publicDocs.has(name))return true;
   if(/^scripts\/(?:prepare-open-source|check-public-source|configure-account|open-source\.test)\.mjs$/.test(name))return true;

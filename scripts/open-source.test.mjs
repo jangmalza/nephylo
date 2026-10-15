@@ -17,7 +17,8 @@ test('account deployment input accepts only a public key and never enables an em
 
 test('source export has an explicit boundary for private data, operations and binaries',()=>{
   for(const name of ['outputs/profile-before/secret.dat','.git/config','docs/releases/1.25.20.json','migration/lightsail/STATE.md','.github/workflows/cd.yml','work/website/dist/downloads/Nephylo-Setup.exe','work/website/dist/downloads/x.zip','work/membership/client-config.json','work/website/account-config.local.json','../outside','work/src/../../outside','work/membership/node_modules/a/index.js','work/package-release.ps1','work/membership/GOOGLE-LOGIN.md'])assert.equal(publicSourcePath(name),false,name);
-  for(const name of ['LICENSE','work/src/Program.cs','work/assets/update-signing-public.xml','work/membership/supabase/.env.example','work/website/account-config.example.json','work/website/dist/downloads/update.json'])assert.equal(publicSourcePath(name),true,name);
+  for(const name of ['LICENSE','work/src/Program.cs','work/assets/update-signing-public.xml','work/membership/supabase/.env.example','work/website/account-config.example.json','work/website/dist/downloads/update.json','docs/images/widget.png','docs/images/minibar.png','docs/images/dashboard.png','docs/images/history.png'])assert.equal(publicSourcePath(name),true,name);
+  for(const name of ['docs/images/private-account.png','docs/images/capture.json','docs/images/widget.png/../secret.png'])assert.equal(publicSourcePath(name),false,name);
 });
 test('export neutralizes account configuration and refuses an existing output',()=>{
   const parent=path.resolve('outputs/oss-preparation-tests');mkdirSync(parent,{recursive:true});const repo=mkdtempSync(path.join(parent,'repo-'));
