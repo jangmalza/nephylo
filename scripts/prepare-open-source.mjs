@@ -4,13 +4,16 @@ import {existsSync,lstatSync,mkdirSync,readFileSync,writeFileSync} from 'node:fs
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {privatePath} from '../.github/scripts/scan-secrets.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const top=new Set(['LICENSE','THIRD-PARTY-NOTICES.txt','CONTRIBUTING.md','.gitattributes','.gitignore','.gitleaks.toml']);
 const githubScripts=new Set(['scan-secrets.mjs','secret-policy.test.mjs','check-ci-result.mjs','run-node-checks.mjs']);
 const workFiles=new Set(['build.ps1','build-setup.ps1','compose-notices.ps1','generate-app-icon.ps1','generate-service-icons.ps1','Install.cmd','sign-release.ps1','README.txt','UPDATE-RELEASES.md']);
 const publicDocs=new Map([['docs/public/RELEASING.md','docs/RELEASING.md'],['docs/public/UPDATE-RELEASES.md','work/UPDATE-RELEASES.md'],['docs/public/WEBSITE.md','work/website/README.md'],['docs/public/MEMBERSHIP.md','work/membership/README.md']]);
+const jsonFiles=new Set(['work/membership/client-config.example.json','work/membership/package.json','work/membership/package-lock.json','work/membership/setup/auth-rate-limit-policy.v1.json','work/website/account-config.example.json','work/website/dist/account/config.json','work/website/dist/downloads/release.json','work/website/dist/downloads/update.json']);
 export function publicSourcePath(name){
   if(!name||name.includes('\\')||path.isAbsolute(name)||name.split('/').some(p=>p==='..'||p===''))return false;
+  if(privatePath(name))return false;
   if(/\.(exe|dll|pdb|zip|dpapi|pem|pfx|p12|log|dat)$/i.test(name))return false;
   if(/(?:^|\/)(?:node_modules|outputs|\.git|\.temp|\.branches)(?:\/|$)/.test(name))return false;
   if(/(?:^|\/)(?:client-config\.json|account-config\.local\.json|auth\.json|settings\.json|usage-journal\.json)$/.test(name))return false;
@@ -21,10 +24,13 @@ export function publicSourcePath(name){
   if(/^scripts\/(?:prepare-open-source|check-public-source|configure-account|open-source\.test)\.mjs$/.test(name))return true;
   if(name==='.github/templates/public-ci.yml')return true;
   if(name.startsWith('.github/scripts/')&&githubScripts.has(path.posix.basename(name)))return true;
-  if(/^work\/(src|assets|tests|installer)\//.test(name))return true;
+  if(name.startsWith('work/src/'))return /\.(cs|manifest|config)$/.test(name);
+  if(name.startsWith('work/assets/'))return /\.(svg|png|ico|xml|md|txt)$/.test(name);
+  if(name.startsWith('work/tests/'))return /\.(cs|ps1|py)$/.test(name);
+  if(name.startsWith('work/installer/'))return /\.(iss|md)$/.test(name);
   if(name.startsWith('work/')&&workFiles.has(name.slice(5)))return true;
-  if(name.startsWith('work/membership/'))return !name.endsWith('.md')||name==='work/membership/README.md';
-  if(name.startsWith('work/website/'))return true;
+  if(name.startsWith('work/membership/'))return jsonFiles.has(name)||name==='work/membership/README.md'||/\.(mjs|ps1|html|sql|ts|toml)$/.test(name)||name==='work/membership/.gitignore'||name==='work/membership/supabase/.env.example';
+  if(name.startsWith('work/website/'))return jsonFiles.has(name)||/\.(mjs|js|css|html|svg|png|ico|xml|txt|ps1)$/.test(name)||name==='work/website/README.md'||name==='work/website/.gitignore';
   return false;
 }
 function regularFile(repository,name){
@@ -43,6 +49,8 @@ export function prepareOpenSource({repository=root,output}={}){
   const names=[...new Set(git(['ls-files','--cached','--others','--exclude-standard','-z']).split('\0').filter(Boolean))];
   const files=new Map();
   for(const name of names.filter(publicSourcePath))files.set(name,readFileSync(regularFile(repository,name)));
+  const version=files.get('work/src/AssemblyInfo.cs')?.toString('utf8').match(/AssemblyFileVersion\("(\d+\.\d+\.\d+)\.0"\)/)?.[1];
+  assert.ok(version,'Missing canonical application version');
   for(const required of ['LICENSE','docs/PUBLIC-README.md','.github/templates/public-ci.yml','work/website/account-config.example.json',...publicDocs.keys()])assert.ok(files.has(required),'Missing public template: '+required);
   const productionConfig=JSON.parse(files.get('work/website/dist/account/config.json').toString('utf8'));
   const projectRef=productionConfig.SupabaseUrl?.match(/^https:\/\/([a-z0-9]{20})\.supabase\.co$/)?.[1];
@@ -56,6 +64,7 @@ export function prepareOpenSource({repository=root,output}={}){
   for(const [template,target] of publicDocs)files.set(target,files.get(template));
   files.set('.github/workflows/ci.yml',files.get('.github/templates/public-ci.yml'));
   files.set('work/website/dist/account/config.json',files.get('work/website/account-config.example.json'));
+  for(const [name,bytes]of files)if(name.endsWith('.md')||name==='work/README.txt')files.set(name,Buffer.from(bytes.toString('utf8').replaceAll('{{SOURCE_VERSION}}',version)));
   // Developer snapshots deliberately contain neither Git history nor releases.
   // The current official update verification public key is public, not a secret.
   const inventory=[];

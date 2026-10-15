@@ -1,5 +1,7 @@
 # 오픈소스 공개와 포크 안내
 
+공식 공개 소스: [jangmalza/nephylo](https://github.com/jangmalza/nephylo), `v1.25.21` 태그. 2026-10-15 운영 저장소의 이력을 가져오지 않은 새 저장소로 공개했으며, 공개용 Source CI의 Windows·서버 격리·소스 구성·비밀정보 검사가 통과했습니다. 아래 절차는 후속 공개 스냅샷을 준비할 때도 사용합니다.
+
 ## MIT 적용 범위
 
 Nephylo 소스는 MIT입니다. 다른 사람이 유료 제품이나 비공개 수정본에 사용할 수 있으며 저작권·라이선스 고지를 유지해야 합니다. 외부 구성요소는 [라이선스 목록](LICENSES.md)의 원래 조건을 따릅니다.
@@ -13,7 +15,7 @@ node scripts/prepare-open-source.mjs outputs/open-source/nephylo-source
 node scripts/check-public-source.mjs outputs/open-source/nephylo-source
 ```
 
-이력·개인환경이 담긴 검증 기록, 운영 서버 자료, 기존 실행 파일·ZIP, 로컬 백업은 제외합니다. 관리자 `account/config.json`은 비어 있는 예제로 바꾸며 공개용 CI와 README를 사용합니다. 파일 목록·해시는 `source-manifest.json`에 기록합니다. 입력은 Git 추적 파일과 ignore되지 않은 새 소스의 명시적 허용 목록뿐이며 경로 링크는 거부합니다.
+이력·개인환경이 담긴 검증 기록, 운영 서버 자료, 기존 실행 파일·ZIP, 로컬 백업은 제외합니다. 과거 회원·사이트 배포 문서와 공식 운영 패키징 도우미도 제외하며 필요한 개발 문서는 `docs/public/`의 일반 안내로 교체합니다. 관리자 `account/config.json`은 비어 있는 예제로 바꾸며 공개용 CI와 README를 사용합니다. 파일 목록·해시는 Git 텍스트 정규화 전의 내보낸 파일 기준으로 `source-manifest.json`에 기록합니다. 입력은 Git 추적 파일과 ignore되지 않은 새 소스의 명시적 허용 목록뿐이며 경로 링크는 거부합니다.
 
 원래 저장소를 곧바로 Public으로 바꾸면 **이전 커밋의 운영값·개인환경 기록도 함께 보입니다**. 현재 파일 정리나 새 스냅샷 생성은 과거 이력을 지우지 않습니다. 과거 이력을 보존할지, 정리한 스냅샷으로 새 공개 저장소를 시작할지는 공개 전에 결정하세요. 이 도구는 원격 저장소 생성·공개 전환·강제 푸시를 수행하지 않습니다.
 
