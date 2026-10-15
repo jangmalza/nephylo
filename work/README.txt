@@ -4,6 +4,8 @@
 
 A free, open-source Windows widget for AI service usage, remaining quotas and reset times. Built with C# / WPF / .NET Framework 4.8. Current source version: **1.25.21**. No Nephylo account or subscription is required; provider authentication and fees are separate.
 
+Public source updates are automatically synchronized from a checked snapshot. Private deployment records, account settings and Git history are excluded.
+
 여러 AI 서비스의 잔여량과 초기화 시각을 모아 보는 Windows 위젯입니다. 일반 위젯, 미니바, 대시보드, 알림, 최대 30일 이력과 CSV 내보내기를 제공합니다. Nephylo 자체 로그인이나 결제는 필요하지 않으며 AI 서비스의 인증·구독·API 요금은 별도입니다.
 
 ## 라이선스
