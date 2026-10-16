@@ -4,7 +4,7 @@
 
 여러 AI 서비스의 잔여량과 초기화 시각을 Windows 바탕화면에서 확인하는 무료 오픈소스 위젯입니다. Nephylo 가입이나 결제 없이 모든 기능을 사용할 수 있습니다.
 
-**[Windows 설치 파일 다운로드](https://nephylo.com/downloads/Nephylo-Setup.exe)** · [홈페이지](https://nephylo.com/) · [English](#english) · [MIT License](LICENSE)
+**[Windows 설치 파일 다운로드](https://nephylo.com/downloads/Nephylo-Setup.exe)** · [홈페이지](https://nephylo.com/) · [개발 후원](https://github.com/sponsors/jangmalza) · [English](#english) · [MIT License](LICENSE)
 
 <p align="center">
   <img src="docs/images/widget.png" width="360" alt="Nephylo 다크 모드 위젯: Codex의 5시간·주간 잔여량, ElevenLabs 크레딧과 초기화 시각" />
@@ -173,6 +173,10 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File .\work\tests\run-ci
 
 공개 소스는 검증된 스냅샷에서 자동 동기화됩니다. 운영 배포 자료·개인 설정·비공개 Git 이력·기존 EXE·ZIP은 포함하지 않습니다. 웹 관리자 설정은 비활성 예제이며 공식 업데이트 검증용 공개키만 포함합니다. 웹사이트를 포크해 서비스하려면 자신의 릴리스 산출물과 운영 설정이 필요합니다.
 
+## 개발 후원
+
+[GitHub Sponsors에서 후원하기](https://github.com/sponsors/jangmalza)로 서비스 연동 유지보수, 오류 수정과 호스팅·테스트 비용을 지원할 수 있습니다. 후원은 선택이며, 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다. 별도의 전용 기능이나 우선 지원을 제공하는 상품이 아닙니다.
+
 ## 라이선스
 
 Nephylo 코드·문서·자체 아이콘은 [MIT License](LICENSE)입니다. 수정·재배포·상업적 이용 시 저작권과 라이선스 고지를 유지하세요. 외부 구성요소는 [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt)와 [라이선스 목록](docs/LICENSES.md)의 조건을 따릅니다. 코드 공개가 서비스 상표나 외부 API 사용 권한을 대신하지는 않습니다.
@@ -180,6 +184,8 @@ Nephylo 코드·문서·자체 아이콘은 [MIT License](LICENSE)입니다. 수
 ## English
 
 **Nephylo is a free, open-source Windows widget for AI service quotas, remaining credits and reset times.** No Nephylo account or payment is required. Provider authentication, subscriptions and API fees are separate.
+
+**[Sponsor development on GitHub](https://github.com/sponsors/jangmalza):** optional contributions support integration maintenance, bug fixes, hosting and testing. All widget features remain free regardless of sponsorship. Sponsorship does not include exclusive features or priority support.
 
 **Install:** [Download Nephylo-Setup.exe](https://nephylo.com/downloads/Nephylo-Setup.exe), run it, then use **＋ → Connect services**. No build tools are required. The [website](https://nephylo.com/) also provides a verified PowerShell installation command. Requires Windows 10 1903+ x64 or Windows 11 x64/ARM64 and .NET Framework 4.8.
 

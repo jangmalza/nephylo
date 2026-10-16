@@ -364,5 +364,7 @@ export const mainTranslations = {
   "Nephylo 가입·로그인·결제와 Pro 제한을 제거했습니다. 여러 서비스, 알림, 이력·CSV, 잔여량 분석·주간 요약과 테마를 모두 무료로 사용하세요. 기존 서비스 연결·설정·이력은 유지되며, 각 AI 서비스의 로그인·구독·API 요금은 별도입니다.": "Nephylo sign-up, sign-in, payments and Pro restrictions have been removed. Multiple services, alerts, history and CSV export, remaining-usage insights, weekly summaries and themes are all free. Existing connections, settings and history are retained. AI provider sign-ins, subscriptions and API charges are separate.",
   "Claude 연결 검사와 오류 안내 개선": "Improved Claude connection checks and error guidance",
   "Claude 연결 전에 실행 명령과 기록 폴더 접근을 확인합니다. 실행 실패·시간 초과·파일 접근 오류를 수신 대기와 구분하고, 기존 설정과 사용량을 보존합니다. 진단 기록에는 오류 종류와 시각만 남깁니다.": "Before connecting Claude, Nephylo checks command execution and access to its data folder. Execution failures, timeouts and file access errors are distinguished from waiting for data, while existing settings and usage are preserved. Diagnostic records contain only the error category and time.",
-  "소스 코드 · MIT ↗": "Source code · MIT ↗"
+  "소스 코드 · MIT ↗": "Source code · MIT ↗",
+  "후원은 선택입니다. 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다.": "Sponsorship is optional. All widget features are free, whether or not you sponsor.",
+  "개발 후원하기 ↗": "Sponsor development ↗"
 };

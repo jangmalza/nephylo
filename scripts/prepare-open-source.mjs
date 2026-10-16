@@ -21,6 +21,7 @@ export function publicSourcePath(name){
   if(/(?:^|\/)(?:client-config\.json|account-config\.local\.json|auth\.json|settings\.json|usage-journal\.json)$/.test(name))return false;
   if(/(?:^|\/)\.env(?:\..*)?$/.test(name)&&!name.endsWith('/.env.example'))return false;
   if(top.has(name))return true;
+  if(name==='.github/FUNDING.yml')return true;
   if(publicImages.has(name))return true;
   if(/^docs\/(?:OPEN-SOURCE|PUBLIC-README|LICENSES)\.md$/.test(name))return true;
   if(publicDocs.has(name))return true;

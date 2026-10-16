@@ -16,6 +16,8 @@ test('account deployment input accepts only a public key and never enables an em
 });
 
 test('source export has an explicit boundary for private data, operations and binaries',()=>{
+  assert.equal(publicSourcePath('.github/FUNDING.yml'),true);
+  assert.equal(publicSourcePath('.github/private-funding.yml'),false);
   for(const name of ['outputs/profile-before/secret.dat','.git/config','docs/releases/1.25.20.json','migration/lightsail/STATE.md','.github/workflows/cd.yml','work/website/dist/downloads/Nephylo-Setup.exe','work/website/dist/downloads/x.zip','work/membership/client-config.json','work/website/account-config.local.json','../outside','work/src/../../outside','work/membership/node_modules/a/index.js','work/package-release.ps1','work/membership/GOOGLE-LOGIN.md'])assert.equal(publicSourcePath(name),false,name);
   for(const name of ['LICENSE','work/src/Program.cs','work/assets/update-signing-public.xml','work/membership/supabase/.env.example','work/website/account-config.example.json','work/website/dist/downloads/update.json','docs/images/widget.png','docs/images/minibar.png','docs/images/dashboard.png','docs/images/history.png'])assert.equal(publicSourcePath(name),true,name);
   for(const name of ['docs/images/private-account.png','docs/images/capture.json','docs/images/widget.png/../secret.png'])assert.equal(publicSourcePath(name),false,name);
@@ -25,6 +27,7 @@ test('export neutralizes account configuration and refuses an existing output',(
   execFileSync('git',['init','-q'],{cwd:repo,stdio:'pipe',windowsHide:true});
   const write=(name,value)=>{mkdirSync(path.dirname(path.join(repo,name)),{recursive:true});writeFileSync(path.join(repo,name),value);};
   write('LICENSE','MIT License\n');write('docs/PUBLIC-README.md','# Public source {{SOURCE_VERSION}}\n');write('.github/templates/public-ci.yml','name: Source CI\n');
+  write('.github/FUNDING.yml','github: jangmalza\n');
   write('work/src/AssemblyInfo.cs','[assembly: AssemblyFileVersion("1.25.21.0")]');
   for(const name of ['RELEASING','UPDATE-RELEASES','WEBSITE','MEMBERSHIP'])write('docs/public/'+name+'.md','# Public developer guide\n');
   const empty=JSON.stringify({SupabaseUrl:'',PublishableKey:'',GoogleEnabled:false,EmailEnabled:false});write('work/website/account-config.example.json',empty);
@@ -33,6 +36,7 @@ test('export neutralizes account configuration and refuses an existing output',(
   execFileSync('git',['add','.'],{cwd:repo,stdio:'pipe',windowsHide:true});execFileSync('git',['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture'],{cwd:repo,stdio:'pipe',windowsHide:true});
   const result=prepareOpenSource({repository:repo,output:'outputs/open-source/result'});
   assert.equal(readFileSync(path.join(result.directory,'README.md'),'utf8'),'# Public source 1.25.21\n');
+  assert.equal(readFileSync(path.join(result.directory,'.github/FUNDING.yml'),'utf8'),'github: jangmalza\n');
   assert.equal(readFileSync(path.join(result.directory,'docs/PUBLIC-README.md'),'utf8'),'# Public source {{SOURCE_VERSION}}\n');
   assert.equal(readFileSync(path.join(result.directory,'work/website/dist/account/config.json'),'utf8'),empty);
   assert.ok(!existsSync(path.join(result.directory,'.git')));assert.ok(!existsSync(path.join(result.directory,'docs/releases/private.json')));

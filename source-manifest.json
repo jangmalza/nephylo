@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "sourceCommit": "7b10566f2dc0c5aa6dd254fd70928d5c2a534f02",
+  "sourceCommit": "bcdf6fd21f187424adf196a048e7bcf98795453e",
   "includesWorkingTreeChanges": false,
   "gitHistoryIncluded": false,
   "releaseBinariesIncluded": false,
@@ -10,6 +10,11 @@
       "path": ".gitattributes",
       "bytes": 491,
       "sha256": "f2ecf1a96250fc3311b4a76ca17bf6399795dfd0a7272a7f3d79b261f05954d6"
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "bytes": 18,
+      "sha256": "4edd64d18c02e079817b449a6c4aba1cb3d2a7be4872147ad4ff53fb7ae0c8d9"
     },
     {
       "path": ".github/scripts/check-ci-result.mjs",
@@ -88,8 +93,8 @@
     },
     {
       "path": "docs/PUBLIC-README.md",
-      "bytes": 20612,
-      "sha256": "34f3130e013709bdc617457f13bdac32119a8674afb154a6e7008f7dbfede1e2"
+      "bytes": 21368,
+      "sha256": "a626c9d42a46c49c6a2555c2a836b7994601ef1ce003f897d7e0f14571180b85"
     },
     {
       "path": "docs/public/MEMBERSHIP.md",
@@ -123,8 +128,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 20601,
-      "sha256": "6771f7683edb96c010ab27771bc2194047e7a99194c1885a4bf935cf39f28d53"
+      "bytes": 21357,
+      "sha256": "f6430208701f4b5b3a924c372afc7987621a700152a085dd780d7ade7a6c6368"
     },
     {
       "path": "scripts/check-public-source.mjs",
@@ -138,13 +143,13 @@
     },
     {
       "path": "scripts/open-source.test.mjs",
-      "bytes": 6726,
-      "sha256": "87b7c3271f80a37137f6c53c39d327547bb947fcb163f84479d959db49a6e2a4"
+      "bytes": 7023,
+      "sha256": "7cd67589c5e2f76b3b33279ef15e306b42a38d7168be81299cd9281a6ac415eb"
     },
     {
       "path": "scripts/prepare-open-source.mjs",
-      "bytes": 9043,
-      "sha256": "91cff85d23b5ca6d5ae2d28787feb6a681b290713eda3678b73a3775115d3a6e"
+      "bytes": 9090,
+      "sha256": "733f3c5172e13667998d787242bcccc7e79bced5eafe12c30986797f819f0969"
     },
     {
       "path": "THIRD-PARTY-NOTICES.txt",
@@ -438,8 +443,8 @@
     },
     {
       "path": "work/README.txt",
-      "bytes": 20601,
-      "sha256": "6771f7683edb96c010ab27771bc2194047e7a99194c1885a4bf935cf39f28d53"
+      "bytes": 21357,
+      "sha256": "f6430208701f4b5b3a924c372afc7987621a700152a085dd780d7ade7a6c6368"
     },
     {
       "path": "work/sign-release.ps1",
@@ -1568,8 +1573,8 @@
     },
     {
       "path": "work/website/dist/app.js",
-      "bytes": 11762,
-      "sha256": "9c17c1ac138459edc2f344cc473ed07b8232dc143fa1dff6ce85683b387b76ae"
+      "bytes": 11767,
+      "sha256": "eac8866abb4ea8ab51740e16625a16d7bb5b3fa4da8c62dc2450ec3c2b5c4a65"
     },
     {
       "path": "work/website/dist/assets/app-icon.svg",
@@ -1668,13 +1673,13 @@
     },
     {
       "path": "work/website/dist/index.html",
-      "bytes": 48027,
-      "sha256": "60548854cbb4064a343da4f2dddff3640c84eee0babf7f1ec300415511d71b69"
+      "bytes": 48452,
+      "sha256": "75cf611ab7377b5cec4c566b8101372e8a38ce9a627dbf2a92b2e05cc3b95d7a"
     },
     {
       "path": "work/website/dist/main-translations.js",
-      "bytes": 59425,
-      "sha256": "1477faac6e60e286a085cae02f659c89fdffeeb0f4d0ab8af7d667059ae4531d"
+      "bytes": 59691,
+      "sha256": "e3469679860238f9051183c8f9afcac6f4a25a529a31d4c7f514a827019d62c0"
     },
     {
       "path": "work/website/dist/powershell-install.js",
