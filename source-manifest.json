@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "sourceCommit": "5ff20f3fa53951c1b0173a03266e357657dd23a4",
+  "sourceCommit": "7b10566f2dc0c5aa6dd254fd70928d5c2a534f02",
   "includesWorkingTreeChanges": false,
   "gitHistoryIncluded": false,
   "releaseBinariesIncluded": false,
@@ -88,8 +88,8 @@
     },
     {
       "path": "docs/PUBLIC-README.md",
-      "bytes": 9850,
-      "sha256": "57243f7742463a206dc5c2a5cec2fcdd8ea252523deb968a817fa14f974298e2"
+      "bytes": 20612,
+      "sha256": "34f3130e013709bdc617457f13bdac32119a8674afb154a6e7008f7dbfede1e2"
     },
     {
       "path": "docs/public/MEMBERSHIP.md",
@@ -123,8 +123,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9839,
-      "sha256": "9fa4ce24326329f24d75df6757467b3699223fda3abe10c410fec03f6682881f"
+      "bytes": 20601,
+      "sha256": "6771f7683edb96c010ab27771bc2194047e7a99194c1885a4bf935cf39f28d53"
     },
     {
       "path": "scripts/check-public-source.mjs",
@@ -438,8 +438,8 @@
     },
     {
       "path": "work/README.txt",
-      "bytes": 9839,
-      "sha256": "9fa4ce24326329f24d75df6757467b3699223fda3abe10c410fec03f6682881f"
+      "bytes": 20601,
+      "sha256": "6771f7683edb96c010ab27771bc2194047e7a99194c1885a4bf935cf39f28d53"
     },
     {
       "path": "work/sign-release.ps1",
