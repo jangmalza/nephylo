@@ -244,6 +244,8 @@ namespace UsageWidget
             notifications.Click += (s,e) => OpenNotificationSettings(); menu.Items.Add(notifications);
             var plan = WidgetMenuItem("무료 이용 안내", "\uE8D4");
             plan.Click += (s,e) => OpenPlan(); menu.Items.Add(plan);
+            var sponsor = WidgetMenuItem("후원하기 ↗", "\uEB51");
+            sponsor.Click += (s,e) => OpenSponsorship(); menu.Items.Add(sponsor);
             var release = WidgetMenuItem("버전 · 설치 · 업데이트", "\uE946");
             release.Click += (s,e) => OpenReleaseInfo(); menu.Items.Add(release);
             var onboarding = WidgetMenuItem("연결 시작 도우미", "\uE946");

@@ -328,6 +328,8 @@ namespace UsageWidget
             d["오래된 기록"] = "Older observations";
             d["업데이트가 준비되었습니다. 설정 · 계정의 버전 · 설치 · 업데이트에서 설치할 수 있습니다."] = "An update is ready. Open Version, installation and updates from Settings and account to install it.";
             d["대시보드 열기"] = "Open dashboard";
+            d["후원하기 ↗"] = "Sponsor ↗";
+            d["후원은 선택입니다. 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다."] = "Sponsorship is optional. All widget features are free, whether or not you sponsor.";
             d["개요"] = "Overview";
             d["이 PC의 사용량"] = "Usage on this PC";
             d["사이드바 접기 · 펼치기"] = "Toggle sidebar";

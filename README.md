@@ -144,7 +144,7 @@ Nephylo는 각 AI 서비스의 공식 제품이 아닙니다. 제공자가 공�
 
 ## 개발·기여
 
-현재 소스 버전: **1.25.21** · C# / WPF / .NET Framework 4.8
+현재 소스 버전: **1.25.22** · C# / WPF / .NET Framework 4.8
 
 <details>
 <summary><strong>소스에서 빌드하고 테스트하기</strong></summary>

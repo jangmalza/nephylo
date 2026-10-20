@@ -366,5 +366,7 @@ export const mainTranslations = {
   "Claude 연결 전에 실행 명령과 기록 폴더 접근을 확인합니다. 실행 실패·시간 초과·파일 접근 오류를 수신 대기와 구분하고, 기존 설정과 사용량을 보존합니다. 진단 기록에는 오류 종류와 시각만 남깁니다.": "Before connecting Claude, Nephylo checks command execution and access to its data folder. Execution failures, timeouts and file access errors are distinguished from waiting for data, while existing settings and usage are preserved. Diagnostic records contain only the error category and time.",
   "소스 코드 · MIT ↗": "Source code · MIT ↗",
   "후원은 선택입니다. 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다.": "Sponsorship is optional. All widget features are free, whether or not you sponsor.",
-  "개발 후원하기 ↗": "Sponsor development ↗"
+  "개발 후원하기 ↗": "Sponsor development ↗",
+  "위젯에서 개발 후원하기": "Sponsor development from the widget",
+  "위젯의 더 보기·트레이 메뉴와 무료 이용 안내 창에 GitHub Sponsors 후원 링크를 추가했습니다. 기존 화면 구성은 유지하며, 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다.": "Added GitHub Sponsors links to the widget’s More and tray menus and Free access information window. The existing layout is preserved, and all widget features remain free regardless of sponsorship."
 };

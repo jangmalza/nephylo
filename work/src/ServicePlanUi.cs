@@ -144,6 +144,11 @@ namespace UsageWidget
             refreshPlanControls();
         }
 
+        private void OpenSponsorship()
+        {
+            OpenOfficialPage("https://github.com/sponsors/jangmalza");
+        }
+
         private void OpenPlan()
         {
             if (planWindow != null) { planWindow.Activate(); return; }
@@ -155,6 +160,8 @@ namespace UsageWidget
             body.Children.Add(T("연결 정보, 설정과 사용 이력은 이 PC에 보관합니다.",12,"#252827",FontWeights.Normal,new Thickness(0,2,0,10)));
             body.Children.Add(T("무제한은 지원 서비스 수 기준이며 같은 서비스의 여러 계정을 뜻하지 않습니다. 각 AI 서비스의 구독·API 비용은 별도입니다.",11,"#647070",FontWeights.Normal,new Thickness(0,0,0,10)));
             body.Children.Add(SmallAction("사이트에서 무료 이용 안내 보기 ↗",() => OpenOfficialPage("https://nephylo.com/#pricing")));
+            body.Children.Add(T("후원은 선택입니다. 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다.",11,"#647070",FontWeights.Normal,new Thickness(0,16,0,4)));
+            body.Children.Add(SmallAction("후원하기 ↗",OpenSponsorship));
             footer.Children.Add(ManagementAction("닫기",() => dialog.Close()));
             dialog.Closed += (s,e) => planWindow = null; dialog.Show();
         }

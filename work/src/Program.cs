@@ -589,6 +589,7 @@ namespace UsageWidget
             menu.Items.Add("주간 요약", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenWeeklySummary(); })));
             menu.Items.Add("알림 · 이력 설정", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenNotificationSettings(); })));
             menu.Items.Add("무료 이용 안내", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenPlan(); })));
+            menu.Items.Add("후원하기 ↗", null, (s,e) => Dispatcher.BeginInvoke(new Action(OpenSponsorship)));
             menu.Items.Add("위젯 설정", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenSettings(); })));
             menu.Items.Add("서비스 연결 · 관리", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenServices(CurrentServiceSelection()); })));
             menu.Items.Add("연결 시작 도우미", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenOnboarding(); })));
