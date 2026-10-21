@@ -28,7 +28,7 @@
 
 현재 EXE에는 **Windows 코드 서명이 적용되지 않아** SmartScreen에서 알 수 없는 게시자 등의 경고가 표시될 수 있습니다. [공식 다운로드 페이지](https://nephylo.com/#download)에서 배포 주소와 SHA-256을 확인하세요. 설치 환경은 [설치 FAQ](https://nephylo.com/#faq)에서 확인할 수 있습니다.
 
-Nephylo가 확인하는 **업데이트 정보의 배포 서명·파일 무결성**은 Windows 코드 서명과 별개이며, Windows의 보안 경고가 사라진다는 뜻이 아닙니다. 설치가 막히면 [이슈](https://github.com/jangmalza/nephylo/issues)에 Windows 버전·설치 파일 버전·오류 문구를 알려주세요. API 키나 인증 정보는 포함하지 마세요.
+Nephylo가 확인하는 **업데이트 정보의 배포 서명·파일 무결성**은 Windows 코드 서명과 별개이며, Windows의 보안 경고가 사라진다는 뜻이 아닙니다. 설치가 막히면 [이슈](https://github.com/jangmalza/nephylo-widget/issues)에 Windows 버전·설치 파일 버전·오류 문구를 알려주세요. API 키나 인증 정보는 포함하지 마세요.
 
 </details>
 
@@ -156,7 +156,7 @@ Nephylo는 각 AI 서비스의 공식 제품이 아닙니다. 제공자가 공�
 Windows PowerShell 5.1과 .NET Framework 4.8을 사용합니다. 테스트 경로 길이 제한을 피하려면 `C:\src\nephylo`처럼 짧은 경로에 clone하세요.
 
 ```powershell
-git clone https://github.com/jangmalza/nephylo.git C:\src\nephylo
+git clone https://github.com/jangmalza/nephylo-widget.git C:\src\nephylo
 cd C:\src\nephylo
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\work\build.ps1
 if ($LASTEXITCODE -ne 0) { throw '빌드 실패' }
@@ -173,7 +173,7 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File .\work\tests\run-ci
 
 </details>
 
-[기여 안내](CONTRIBUTING.md) · [포크·독립 배포 안내](docs/OPEN-SOURCE.md) · [릴리스 절차](docs/RELEASING.md) · [이슈 등록](https://github.com/jangmalza/nephylo/issues)
+[기여 안내](CONTRIBUTING.md) · [포크·독립 배포 안내](docs/OPEN-SOURCE.md) · [릴리스 절차](docs/RELEASING.md) · [이슈 등록](https://github.com/jangmalza/nephylo-widget/issues)
 
 공개 소스는 검증된 스냅샷에서 자동 동기화됩니다. 운영 배포 자료·개인 설정·비공개 Git 이력·기존 EXE·ZIP은 포함하지 않습니다. 웹 관리자 설정은 비활성 예제이며 공식 업데이트 검증용 공개키만 포함합니다. 웹사이트를 포크해 서비스하려면 자신의 릴리스 산출물과 운영 설정이 필요합니다.
 
@@ -206,7 +206,7 @@ If the widget is not visible after installation, open **Nephylo** from the Windo
 - **Legacy Claude receipts, including public 1.25.22:** connect Claude Code, reopen the CLI and receive a normal response. The public 1.25.22 button is **Check received data**; the development-source button is **Check remaining usage**. Waiting for a first receipt differs from receiving data without quota fields. Existing status-line scripts are preserved.
 - **OpenAI API:** use an organization owner's **Admin API key**; ordinary model API keys cannot read organization costs. Check and save it under **＋ → OpenAI API**. The optional monthly budget is a comparison value and does not change your actual billing limit.
 
-The current EXE has **no Windows code signature**, so SmartScreen may show an unknown-publisher warning. Check the source and SHA-256 on the [official download page](https://nephylo.com/#download); see the [installation FAQ](https://nephylo.com/#faq) or report your Windows version, installer version and error message in an [issue](https://github.com/jangmalza/nephylo/issues). Do not include credentials. Nephylo's signed update metadata and file-integrity checks are separate from Windows code signing and do not guarantee that Windows warnings disappear.
+The current EXE has **no Windows code signature**, so SmartScreen may show an unknown-publisher warning. Check the source and SHA-256 on the [official download page](https://nephylo.com/#download); see the [installation FAQ](https://nephylo.com/#faq) or report your Windows version, installer version and error message in an [issue](https://github.com/jangmalza/nephylo-widget/issues). Do not include credentials. Nephylo's signed update metadata and file-integrity checks are separate from Windows code signing and do not guarantee that Windows warnings disappear.
 
 </details>
 

@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "sourceCommit": "a38473426b678057e61e00f30e1ceae762cd009a",
+  "sourceCommit": "33088e4d9bc2befcccca53509041f4d9fd96695f",
   "includesWorkingTreeChanges": false,
   "gitHistoryIncluded": false,
   "releaseBinariesIncluded": false,
@@ -88,13 +88,13 @@
     },
     {
       "path": "docs/OPEN-SOURCE.md",
-      "bytes": 6128,
-      "sha256": "e96c6478c53672fc679a39d4c3e40c4fff1c6d1f5ecbd0d3d575bd0bfb7f6227"
+      "bytes": 6328,
+      "sha256": "25aadca9723e2bfa11e832756ed97c1e608b928cb86acc2a09755de3b5af4970"
     },
     {
       "path": "docs/PUBLIC-README.md",
-      "bytes": 23370,
-      "sha256": "121a60660a2b5ffcc600786da3917d30e31af5bbc0e2a8955fca242ffe34a17c"
+      "bytes": 23398,
+      "sha256": "6dc6e00dcf3357f79886a48a99f0826a2a25763f76a1d7736d689ae706369d88"
     },
     {
       "path": "docs/public/MEMBERSHIP.md",
@@ -128,8 +128,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 23337,
-      "sha256": "02d8bd4a046d01f39e9aa608fe027c8a3dc6a58462cbe2e195f703a4d2623a09"
+      "bytes": 23365,
+      "sha256": "bc84be8478020773d20df25e27959ca9bea8dbd8ac387259a76bea450572edb0"
     },
     {
       "path": "scripts/check-public-source.mjs",
@@ -443,8 +443,8 @@
     },
     {
       "path": "work/README.txt",
-      "bytes": 23337,
-      "sha256": "02d8bd4a046d01f39e9aa608fe027c8a3dc6a58462cbe2e195f703a4d2623a09"
+      "bytes": 23365,
+      "sha256": "bc84be8478020773d20df25e27959ca9bea8dbd8ac387259a76bea450572edb0"
     },
     {
       "path": "work/sign-release.ps1",
@@ -1508,8 +1508,8 @@
     },
     {
       "path": "work/website/check.mjs",
-      "bytes": 12491,
-      "sha256": "70bc74669e16ead78511fa6e49c1e52d2d61924ef7a5370cd42451552d9f433b"
+      "bytes": 12814,
+      "sha256": "5065d907ece3e56da906f764b2d40b9932736a8515e4cd22c906976ac5ee8c8f"
     },
     {
       "path": "work/website/dist/account/account-translations.js",
@@ -1703,8 +1703,8 @@
     },
     {
       "path": "work/website/dist/index.html",
-      "bytes": 48862,
-      "sha256": "7464428a7e6146214a0083965abdcd826f34f233c685f4411e3afc7fa9c7498b"
+      "bytes": 48869,
+      "sha256": "d7f48ea2868f7202347552e672624102587b6e3072a3ecd45d2a74a224cc151e"
     },
     {
       "path": "work/website/dist/main-translations.js",

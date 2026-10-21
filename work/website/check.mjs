@@ -21,6 +21,8 @@ assert.match(html, /id="menu-toggle"[^>]*aria-controls="site-navigation"/, 'Comp
 assert.match(html, /id="widget-demo"[^>]*data-theme="dark"/, 'Default preview keeps the dark theme');
 assert.doesNotMatch(html, /data-demo-plan|id="demo-extra-service" hidden|id="demo-theme-controls" hidden/, 'All services and theme controls must be usable without a plan toggle');
 assert.ok(html.includes('https://nephylo.com/') && !html.includes('https://usage-widget-hyeonwo-o.hyeonwo-o.chatgpt.site'), 'Homepage must use the custom canonical domain');
+assert.match(html, /href="https:\/\/github\.com\/jangmalza\/nephylo-widget"[^>]*rel="noopener noreferrer"/, 'Source link must point directly to the widget repository');
+assert.doesNotMatch(html, /href="https:\/\/github\.com\/jangmalza\/nephylo(?:["/#?])/, 'Source links must not rely on the previous repository redirect');
 assert.match(html, /property="og:image" content="https:\/\/nephylo.com\/assets\/share-card.png/, 'Link previews must use the local share image');
 const shareCard = await readFile(path.join(dist, 'assets/share-card.png'));
 assert.equal(shareCard.readUInt32BE(16), 1200);
