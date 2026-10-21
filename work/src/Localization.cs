@@ -48,6 +48,7 @@ namespace UsageWidget
         private static List<Template> CreateTemplates()
         {
             var p = new List<Template>();
+            Add(p,@"Claude Code에서 대화 없이 조회한 계정 구독 한도입니다\. 마지막 확인: (.+)","Account subscription limits queried through Claude Code without a conversation. Last checked: {0}",false);
             Add(p,@"(.+)의 초기화 후 새 잔량을 확인했습니다\.","A new balance was confirmed after the reset of {0}.");
             Add(p,@"(.+)의 최근 관측량 기준으로 초기화 전에 잔량이 소진될 것으로 예상됩니다\.","Recent observations suggest {0} will run out before its reset.");
             Add(p,@"(.+)의 사용 추세에 따라 초기화 전에 잔량이 부족해질 수 있습니다\.","Depending on usage, {0} may run low before its reset.");
@@ -131,6 +132,34 @@ namespace UsageWidget
         private static Dictionary<string,string> CreateCatalog()
         {
             var d = new Dictionary<string,string>(StringComparer.Ordinal);
+            d["CODE 조회"] = "CODE query";
+            d["잔여량 조회"] = "Check remaining usage";
+            d["잔여량 조회 중…"] = "Checking remaining usage…";
+            d["질문을 보내지 않고 Claude 구독 한도를 확인합니다."] = "Checking Claude subscription limits without sending a message.";
+            d["잔여량 조회 완료"] = "Remaining usage updated";
+            d["이전 값 · 새로고침 필요"] = "Previous reading · Refresh needed";
+            d["연결 설정됨 · 조회 대기"] = "Connected · Ready to query";
+            d["잔여량 조회 후 연결을 저장하세요"] = "Check remaining usage to save this connection";
+            d["새로고침하여 현재 잔여량을 확인하세요."] = "Refresh to check your current remaining usage.";
+            d["새로고침으로 대화 없이 잔여량을 갱신합니다."] = "Refresh remaining usage without sending a message.";
+            d["‘Claude Code 연결’을 눌러 선택한 환경을 연결하세요."] = "Click Connect Claude Code for the selected environment.";
+            d["Claude Code 2.1.304 이상은 대화 없이 ‘잔여량 조회’와 위젯 새로고침으로 확인할 수 있습니다."] = "With Claude Code 2.1.304 or later, check remaining usage or refresh the widget without a conversation.";
+            d["‘잔여량 조회’로 대화 없이 현재 한도를 확인하세요. Claude Code 2.1.304 이상과 구독 로그인이 필요합니다."] = "Check your current limits without a conversation. Requires Claude Code 2.1.304 or later and a subscription login.";
+            d["‘잔여량 조회’로 현재 한도를 확인하세요."] = "Check remaining usage for your current limits.";
+            d["‘잔여량 조회’를 누르면 선택한 환경을 저장합니다."] = "Checking remaining usage saves the selected environment.";
+            d["기존 응답 수신도 유지하며 새로고침으로 직접 조회할 수 있습니다."] = "Response-based updates remain available, and refresh queries usage directly.";
+            d["기존 상태 표시줄을 유지하려면 체크한 뒤 ‘잔여량 조회’를 누르세요. 아래 명령으로 같은 JSON 입력을 전달하면 기존 응답 수신도 함께 사용할 수 있습니다."] = "Select this option and check remaining usage to keep your existing status line. Forwarding the same JSON input to the command below also keeps response-based updates available.";
+            d["기존 스크립트에서 같은 JSON 입력을 이 명령에 전달하면 응답 수신도 함께 사용할 수 있습니다."] = "Forward the same JSON input from your existing script to this command to keep response-based updates available.";
+            d["Claude 잔여량을 확인해 주세요"] = "Check your Claude remaining usage";
+            d["Claude 연결 안내"] = "Claude connection guide";
+            d["공식 Claude Code를 설치한 뒤 다시 조회해 주세요."] = "Install the official Claude Code CLI and try again.";
+            d["대화 없는 잔여량 조회에는 Claude Code 2.1.304 이상이 필요합니다. CLI를 업데이트한 뒤 다시 조회해 주세요."] = "Checking remaining usage without a conversation requires Claude Code 2.1.304 or later. Update the CLI and try again.";
+            d["Claude Code에서 구독 계정으로 로그인한 뒤 다시 조회해 주세요."] = "Sign in to Claude Code with your subscription account and try again.";
+            d["조회 중 Claude 계정이 변경되었습니다. 새로고침하여 현재 계정을 다시 확인해 주세요."] = "The Claude account changed during the query. Refresh to verify the current account.";
+            d["현재 Claude 계정은 구독 한도를 제공하지 않습니다. Free·API 키 계정은 수동 기록을 이용해 주세요."] = "Subscription limits are unavailable for this Claude account. Use manual records for Free or API-key accounts.";
+            d["Claude 잔여량 조회 시간이 초과되었습니다. 연결 상태를 확인한 뒤 다시 조회해 주세요."] = "The Claude usage query timed out. Check your connection and try again.";
+            d["Claude 잔여량 응답을 확인하지 못했습니다. 잠시 후 새로고침해 주세요. 계속되면 Claude Code 업데이트와 로그인을 확인해 주세요."] = "Could not verify the Claude usage response. Refresh shortly. If the problem persists, check your Claude Code version and login.";
+            d["Claude 사용량 기록이 사용 중입니다. 잠시 후 다시 조회해 주세요."] = "The Claude usage record is busy. Try again shortly.";
             d["연결 시작 도우미"] = "Connection guide";
             d["주간 요약"] = "Weekly summary";
             d["주간 요약 · Pro"] = "Weekly summary · Pro";
@@ -328,7 +357,6 @@ namespace UsageWidget
             d["오래된 기록"] = "Older observations";
             d["업데이트가 준비되었습니다. 설정 · 계정의 버전 · 설치 · 업데이트에서 설치할 수 있습니다."] = "An update is ready. Open Version, installation and updates from Settings and account to install it.";
             d["대시보드 열기"] = "Open dashboard";
-            d["Nephylo ADE 열기"] = "Open Nephylo ADE";
             d["후원하기 ↗"] = "Sponsor ↗";
             d["후원은 선택입니다. 후원 여부와 관계없이 모든 위젯 기능을 무료로 사용할 수 있습니다."] = "Sponsorship is optional. All widget features are free, whether or not you sponsor.";
             d["개요"] = "Overview";

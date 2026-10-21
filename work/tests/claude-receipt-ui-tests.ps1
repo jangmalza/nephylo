@@ -8,6 +8,7 @@ foreach ($reference in @('System.dll','System.Core.dll','System.Web.Extensions.d
 foreach ($reference in @('PresentationFramework.dll','PresentationCore.dll','WindowsBase.dll')) { $arguments += '/reference:'+(Join-Path $framework ('WPF\'+$reference)) }
 $arguments += @(Get-ChildItem -LiteralPath $sourceDirectory -Filter '*.cs' | ForEach-Object { $_.FullName })
 $arguments += Join-Path $PSScriptRoot 'claude-receipt-ui-tests.cs'
+$arguments += Join-Path $PSScriptRoot 'claude-quota-fixture.cs'
 & $compiler @arguments
 if ($LASTEXITCODE -ne 0) { throw 'Claude receipt UI tests did not compile.' }
 & $testExecutable

@@ -88,7 +88,7 @@ namespace UsageWidget
                 Dispatcher.BeginInvoke(new Action(() => {
                     if (exiting) return;
                     var now = DateTimeOffset.Now;
-                    foreach (var view in new[] { codexView,elevenView,openAiView,higgsfieldView }) view.RefreshSchedule.NetworkRestored(now);
+                    foreach (var view in new[] { codexView,elevenView,openAiView,higgsfieldView,claudeView }) view.RefreshSchedule.NetworkRestored(now);
                     nextRefresh = DateTimeOffset.MinValue;
                 }));
             } catch (InvalidOperationException) { /* The dispatcher can shut down after the check above. */ }

@@ -42,6 +42,7 @@ namespace UsageWidget
             }
             bool hasRows = view.Snapshot != null && view.Snapshot.Rows != null && view.Snapshot.Rows.Any(row => row != null);
             bool expired = hasRows && view.Snapshot.Rows.Any(row => row != null && row.ResetsAt.HasValue && row.ResetsAt.Value <= now);
+            if (view.Id == "claude" && source == "cli" && view.ReceiptState == ProviderReceiptState.ResetWaiting) expired = true;
             string note = view.Snapshot == null ? "" : view.Snapshot.Note ?? "";
             if (source == "manual") {
                 result.Label = expired ? "수동 · 기한 경과" : hasRows ? "수동" : "수동 확인";

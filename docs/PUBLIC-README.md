@@ -1,8 +1,10 @@
-# Nephylo
+# Nephylo Widget
 
 **AI 서비스의 남은 사용량을, 한곳에서 가볍게.**
 
 여러 AI 서비스의 잔여량과 초기화 시각을 Windows 바탕화면에서 확인하는 무료 오픈소스 위젯입니다. Nephylo 가입이나 결제 없이 모든 기능을 사용할 수 있습니다.
+
+**버전 범위(2026-10-21 문서 검토):** 이 README는 **{{SOURCE_VERSION}} 개발 소스** 기준입니다. 공식 다운로드의 마지막 확인 버전은 **1.25.22**이며, 아래 Claude 직접 잔여량 조회는 개발 소스 기능입니다. 공개 1.25.22 사용자는 별도로 적은 기존 응답 수신 안내를 따르세요.
 
 **[Windows 설치 파일 다운로드](https://nephylo.com/downloads/Nephylo-Setup.exe)** · [홈페이지](https://nephylo.com/) · [개발 후원](https://github.com/sponsors/jangmalza) · [English](#english) · [MIT License](LICENSE)
 
@@ -49,10 +51,12 @@ Nephylo가 확인하는 **업데이트 정보의 배포 서명·파일 무결성
 | --- | --- | --- |
 | Codex | Windows용 Codex 앱 또는 CLI를 설치하고 로그인합니다. | **＋ → Codex → 연결 환경**에서 Windows 또는 WSL 배포판을 선택하고 **연결 확인**을 누릅니다. 로그인이 필요하면 **브라우저로 로그인**을 사용합니다. |
 | ElevenLabs | API 키에 **사용자 → 읽기(User → Read)** 권한을 켭니다. | **＋ → ElevenLabs**에 키를 붙여 넣고 **연결 확인 후 저장**을 누릅니다. |
-| Claude Code | Windows 또는 선택한 WSL에 Claude Code를 설치하고, 한도 정보를 제공하는 Pro·Max 계정으로 로그인합니다. | **＋ → Claude 개인 구독 → 연결 환경 → Claude Code 연결**을 진행합니다. Claude Code를 다시 열어 **새 응답을 한 번 받은 뒤 수신 확인**을 누릅니다. |
+| Claude Code | 개발 소스의 직접 조회에는 Windows 또는 선택한 WSL의 공식 Claude Code **2.1.304 이상**과 한도 정보를 제공하는 Pro·Max 계정 로그인이 필요합니다. | **＋ → Claude → 연결 환경 → Claude Code 연결 → 잔여량 조회**로 확인합니다. 이후 위젯 새로고침·자동 조회로 갱신하며 Claude와 새 대화를 할 필요가 없습니다. |
 | OpenAI API | 조직 소유자의 **Admin API 키**를 준비합니다. 일반 모델 호출용 API 키로는 비용을 조회할 수 없습니다. | **＋ → OpenAI API**에 키를 입력하고 **연결 확인 후 저장**을 누릅니다. 필요하면 고급 설정에서 월 예산을 입력합니다. 이 값은 위젯의 비교 기준이며 실제 결제 한도를 바꾸지 않습니다. |
 
-Claude Code의 **첫 수신 대기**는 아직 응답 데이터가 도착하지 않았다는 뜻입니다. **수신됨 · 한도 미제공**은 수신은 됐으나 구독 한도가 없는 상태로, 로그인 실패와 구분합니다. Claude Free·API 키 계정이나 웹만 사용하는 경우에는 **수동 기록**을 이용할 수 있습니다.
+개발 소스에서는 **잔여량 조회 완료**와 **이전 값 · 새로고침 필요**를 구분합니다. 직접 조회가 지원되지 않으면 CLI 업데이트·로그인 안내를 확인하세요. Claude Free·API 키 계정이나 웹만 사용하는 경우에는 **수동 기록**을 이용할 수 있습니다.
+
+**기존 응답 수신 방식(공개 1.25.22 포함):** Claude Code 연결 후 CLI를 다시 열고 평소 대화의 새 응답을 받습니다. 공개 1.25.22의 버튼 이름은 **수신 확인**이며, 현재 개발 소스는 **잔여량 조회**입니다. 기존 방식의 **첫 수신 대기**는 아직 데이터가 도착하지 않았다는 뜻이고 **수신됨 · 한도 미제공**은 수신했지만 한도가 없다는 뜻입니다. 기존 상태 표시줄 스크립트는 자동으로 덮어쓰지 않습니다.
 
 나머지 서비스의 준비물과 오류별 해결 방법은 [서비스별 연결·해결 안내](https://nephylo.com/#connect)에서 확인하세요. API 키나 로그인 토큰을 이슈에 첨부하지 마세요.
 
@@ -126,7 +130,7 @@ Claude Code의 **첫 수신 대기**는 아직 응답 데이터가 도착하지 
 | --- | --- |
 | Codex | 로그인된 Codex 앱·CLI에서 계정 한도와 초기화 시각을 조회합니다. Windows와 WSL 환경을 지원합니다. **일반 ChatGPT 채팅의 남은 메시지 횟수는 표시하지 않습니다.** |
 | ElevenLabs | 사용자 읽기 권한이 있는 API 키로 구독 크레딧 잔여량을 조회합니다. |
-| Claude Code | 연결 설정 후 새 응답에서 제공하는 한도 정보를 수신합니다. **Free·API 키 계정의 구독 잔여량 자동 조회는 지원하지 않으며 수동 기록을 이용할 수 있습니다.** |
+| Claude Code | 개발 소스는 공식 CLI 2.1.304 이상에서 대화 없이 5시간·주간 잔여량을 조회합니다. 기존 응답 수신도 유지하며 공개 1.25.22는 이 수신 방식을 사용합니다. **Free·API 키 계정의 구독 잔여량 자동 조회는 지원하지 않으며 수동 기록을 이용할 수 있습니다.** |
 | OpenAI API | Admin API 키로 조회한 이번 달 조직 비용과 사용자가 설정한 예산을 비교합니다. 실제 선불 잔액이나 ChatGPT 구독 잔량을 뜻하지 않습니다. |
 | Higgsfield 웹 | 공식 CLI 로그인과 작업 공간 연결 후 웹 구독 크레딧을 조회합니다. |
 | Higgsfield API | API 콘솔에서 확인한 USD 잔액을 수동 기록합니다. 웹 구독 크레딧과 별도입니다. |
@@ -183,6 +187,8 @@ Nephylo 코드·문서·자체 아이콘은 [MIT License](LICENSE)입니다. 수
 
 ## English
 
+**Version scope (documentation reviewed 2026-10-21):** this README describes development source **{{SOURCE_VERSION}}**. The last verified official download is **1.25.22**. Direct Claude quota queries are a development-source feature; users of public 1.25.22 should follow the separate legacy receipt instructions below.
+
 **Nephylo is a free, open-source Windows widget for AI service quotas, remaining credits and reset times.** No Nephylo account or payment is required. Provider authentication, subscriptions and API fees are separate.
 
 **[Sponsor development on GitHub](https://github.com/sponsors/jangmalza):** optional contributions support integration maintenance, bug fixes, hosting and testing. All widget features remain free regardless of sponsorship. Sponsorship does not include exclusive features or priority support.
@@ -196,7 +202,8 @@ If the widget is not visible after installation, open **Nephylo** from the Windo
 
 - **Codex:** install and sign in to the Windows app/CLI, or the CLI in WSL. Select **＋ → Codex → connection environment**, choose Windows or your distribution, and check the connection. Use the browser sign-in option if needed. Codex quota is separate from ordinary ChatGPT chat message limits.
 - **ElevenLabs:** enable **User → Read** on your API key, paste it under **＋ → ElevenLabs**, then check and save the connection.
-- **Claude Code:** install Claude Code and sign in with a Pro/Max account that provides quota data. Connect it under **＋ → Claude → connection environment**, reopen Claude Code, receive a new response, then check receipt in Nephylo. Waiting for a first receipt is different from receiving data without quota fields. Free/API-key or web-only users can use manual records.
+- **Claude Code, development source:** install official Claude Code **2.1.304 or later** in Windows or the selected WSL distribution and sign in with a Pro/Max account that provides quota data. Use **＋ → Claude → connection environment → Connect Claude Code → Check remaining usage**. Refresh or automatic polling updates the reading without sending a conversation prompt. Follow the CLI update or sign-in guidance if direct queries are unavailable. Free/API-key or web-only users can use manual records.
+- **Legacy Claude receipts, including public 1.25.22:** connect Claude Code, reopen the CLI and receive a normal response. The public 1.25.22 button is **Check received data**; the development-source button is **Check remaining usage**. Waiting for a first receipt differs from receiving data without quota fields. Existing status-line scripts are preserved.
 - **OpenAI API:** use an organization owner's **Admin API key**; ordinary model API keys cannot read organization costs. Check and save it under **＋ → OpenAI API**. The optional monthly budget is a comparison value and does not change your actual billing limit.
 
 The current EXE has **no Windows code signature**, so SmartScreen may show an unknown-publisher warning. Check the source and SHA-256 on the [official download page](https://nephylo.com/#download); see the [installation FAQ](https://nephylo.com/#faq) or report your Windows version, installer version and error message in an [issue](https://github.com/jangmalza/nephylo/issues). Do not include credentials. Nephylo's signed update metadata and file-integrity checks are separate from Windows code signing and do not guarantee that Windows warnings disappear.
@@ -205,7 +212,7 @@ The current EXE has **no Windows code signature**, so SmartScreen may show an un
 
 **Features:** desktop widget, compact minibar, unified dashboard, quota/reset alerts, up to 30 days of local history, CSV export, usage forecasts, weekly summaries, dark/light themes, Korean/English and automatic updates for installed copies.
 
-**Provider scope:** Codex and ElevenLabs expose quota/credit readings; Claude Code reports supported limits after a response; OpenAI API shows organization costs against your configured budget, not prepaid balance or ChatGPT subscription usage. Higgsfield web credits use its CLI connection. Higgsfield API balance, Gemini API and Cursor use manual records. Automatic Claude Free/API-key subscription quota readings are not supported; manual records remain available.
+**Provider scope:** Codex and ElevenLabs expose quota/credit readings. Development source queries supported Claude limits directly through official CLI 2.1.304 or later without a conversation; legacy receipts, including public 1.25.22, update after a normal response. OpenAI API shows organization costs against your configured budget, not prepaid balance or ChatGPT subscription usage. Higgsfield web credits use its CLI connection. Higgsfield API balance, Gemini API and Cursor use manual records. Automatic Claude Free/API-key subscription quota readings are not supported; manual records remain available.
 
 **Finding controls:** the **…** menu opens notification/history settings, usage history with **CSV export**, and version/installation/update management with automatic-update and manual-check controls. The top **⚙** opens language, theme, startup and refresh settings; save your changes. The dashboard's history page also exports the selected service, metric and period.
 

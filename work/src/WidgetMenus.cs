@@ -226,6 +226,12 @@ namespace UsageWidget
 
         private void OpenMoreMenu(Button more)
         {
+            var menu = CreateMoreMenu(more);
+            more.ContextMenu = menu; menu.IsOpen = true;
+        }
+
+        private ContextMenu CreateMoreMenu(Button more)
+        {
             var menu = new ContextMenu {
                 Style = (Style)Resources["WidgetContextMenu"], FontFamily = FontFamily,
                 PlacementTarget = more, Placement = PlacementMode.Custom,
@@ -236,8 +242,6 @@ namespace UsageWidget
             };
             var dashboard = WidgetMenuItem("대시보드 열기", "\uE80F");
             dashboard.Click += (s,e) => OpenDashboard(); menu.Items.Add(dashboard);
-            var studio = WidgetMenuItem("Nephylo ADE 열기", "\uE8F2");
-            studio.Click += (s,e) => OpenStudio(); menu.Items.Add(studio);
             var history = WidgetMenuItem("사용 이력", "\uE9D9");
             history.Click += (s,e) => OpenUsageHistory(); menu.Items.Add(history);
             var weekly = WidgetMenuItem("주간 요약", "\uE9D9");
@@ -274,7 +278,7 @@ namespace UsageWidget
             menu.Items.Add(new Separator { Style = (Style)Resources["WidgetMenuSeparator"] });
             var quit = WidgetMenuItem("종료", "\uE8BB");
             quit.Click += (s,e) => Close(); menu.Items.Add(quit);
-            more.ContextMenu = menu; menu.IsOpen = true;
+            return menu;
         }
 
         private void SetCompactAutoWidth(bool enabled)

@@ -1,5 +1,7 @@
 # 오픈소스 공개와 포크 안내
 
+이 분기의 공개 소스 후보는 위젯 제품만 포함합니다. ADE 소스·검사·개발 실행기·이전 검증 기록은 `other-product-source`로 제외하고 공개 후보 검사에서도 혼입을 거부합니다. AI 개발 환경은 별도 공개 저장소 [Nephylo ADE](https://github.com/jangmalza/nephylo-ade)에서 개발합니다. 위젯 저장소 이름 변경과 동기화 대상 전환은 별도 진행합니다.
+
 공식 공개 소스: [jangmalza/nephylo](https://github.com/jangmalza/nephylo), `v1.25.21` 태그. 2026-10-15 운영 저장소의 이력을 가져오지 않은 새 저장소로 공개했으며, 공개용 Source CI의 Windows·서버 격리·소스 구성·비밀정보 검사가 통과했습니다. 아래 절차는 후속 공개 스냅샷을 준비할 때도 사용합니다.
 
 ## MIT 적용 범위

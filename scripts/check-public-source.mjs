@@ -20,6 +20,8 @@ let scripts=0;
 function visit(directory){for(const name of readdirSync(directory)){
   if(['.git','outputs','node_modules'].includes(name))continue;
   const file=path.join(directory,name),stat=lstatSync(file);assert.ok(!stat.isSymbolicLink(),'Symlinks are not permitted');
+  const relative=path.relative(root,file).split(path.sep).join('/');
+  assert.ok(!/^(?:work\/src\/Studio[^/]*\.cs|work\/tests\/studio-[^/]*|work\/run-ade-dev\.ps1|docs\/(?:ADE-[^/]*|AI-STUDIO\.md|validation\/(?:ade|studio)-[^/]*))$/i.test(relative),'Widget source contains another product: '+relative);
   if(stat.isDirectory()){visit(file);continue;}
   assert.ok(!/\.(exe|dll|pdb|zip|pem|pfx|p12|dpapi|dat)$/i.test(name),'Source distribution contains executable/private artifact');
   if(/\.(?:md|json|js|mjs|ps1|txt|html|yml)$/.test(name)){

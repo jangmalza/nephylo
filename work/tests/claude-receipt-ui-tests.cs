@@ -246,9 +246,9 @@ internal static class ClaudeReceiptUiTests
             ClaudeUsageService.CaptureJson(Quota(DateTimeOffset.UtcNow.AddHours(1)),DateTimeOffset.UtcNow.AddMinutes(-31));
             var editor=new StackPanel(); Call(fixture.Window,"BuildClaudeSettings",editor);
             var existing=Descendants<CheckBox>(editor).Single(item=>Convert.ToString(item.Content) == "기존 상태 표시줄에서 수신");
-            var check=Descendants<Button>(editor).Single(item=>Convert.ToString(item.Content) == "수신 확인");
+            var check=Descendants<Button>(editor).Single(item=>Convert.ToString(item.Content) == "잔여량 조회");
             existing.IsChecked=true;
-            Check(Descendants<TextBlock>(editor).Any(item=>item.Text.Contains("이전 수신값")),"Expired forwarding receipt is labeled stale before opt-in");
+            Check(Descendants<TextBlock>(editor).Any(item=>item.Text.Contains("이전 값")),"Expired forwarding receipt is labeled stale before opt-in");
             check.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             Check(!fixture.Settings.ClaudeUseExistingStatusLine,"Expired forwarding receipt cannot save a new custom-hook opt-in");
             Check(((ServicePlan)Get(fixture.Window,"servicePlan")).ActiveServiceId == "cursor","Rejected stale receipt preserves the active Free service");
@@ -287,10 +287,60 @@ internal static class ClaudeReceiptUiTests
             Check(reload.CheckResetReminders(deadline.AddSeconds(1),new[] { "claude" }).Count == 0,"A receipt already seen while Free still clears restored Pro reset state");
         }
     }
+    private static ClaudeUsageResult DirectQuota()
+    {
+        var now=DateTimeOffset.UtcNow;
+        var response=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>("{\"rate_limits_available\":true,\"subscription_type\":\"max\",\"rate_limits\":{\"five_hour\":{\"utilization\":25,\"resets_at\":\""+now.AddHours(2).ToString("o")+"\"},\"seven_day\":{\"utilization\":40,\"resets_at\":\""+now.AddDays(2).ToString("o")+"\"}}}");
+        return ClaudeQuotaService.Parse(response,now,new string('a',64));
+    }
+    private static void DirectRefreshAndRecovery(string root)
+    {
+        var prior=ClaudeQuotaService.ReadOverride;
+        try{
+            using(var fixture=new Fixture(root,false)){
+                ClaudeUsageService.InstallStatusLine(Assembly.GetExecutingAssembly().Location);
+                Set(fixture.Window,"claudeConfigured",true);
+                SettingsStore.Save(fixture.Settings);
+                string settingsPath=Path.Combine(root,"settings.json"), configPath=Path.Combine(fixture.Config,"settings.json");
+                byte[] settingsBefore=File.ReadAllBytes(settingsPath),configBefore=File.ReadAllBytes(configPath);
+                Call(fixture.Window,"InitializeUsageTracking");
+                ClaudeUsageService.CaptureJson(Quota(DateTimeOffset.UtcNow.AddHours(-1)),DateTimeOffset.UtcNow.AddHours(-2));
+                fixture.Render();
+                Check(fixture.View.ReceiptState==ProviderReceiptState.ResetWaiting,"Existing expired receipt starts as waiting");
+                int requests=0;
+                ClaudeQuotaService.ReadOverride=(distribution,directory,token)=>{requests++;return Task.FromResult(DirectQuota());};
+                var first=(Task)Call(fixture.Window,"ReadClaude");
+                Check(first.IsCompleted&&!first.IsFaulted&&requests==1,"Refresh requests quota without a user conversation");
+                Check(fixture.View.Source=="cli"&&UsageFreshness.Automatic(fixture.View),"Widget and dashboard use automatic CLI freshness");
+                Check(fixture.View.Snapshot.Rows[0].RemainingPercent==75&&fixture.View.Snapshot.Rows[1].RemainingPercent==60,"Fresh common quota replaces expired rows");
+                Check(!UsagePresentation.Describe(fixture.View,DateTimeOffset.Now).Warning,"Current query is not marked as waiting for a Claude response");
+                Check(!Descendants<TextBlock>(fixture.View.Body).Any(t=>t.Text.Contains("새 응답 후")),"Current query removes the old response-only instruction");
+                var restored=ClaudeUsageService.ReadLatest();
+                Check(restored.IsDirectQuery&&restored.AccountFingerprint==new string('a',64),"Sanitized current quota survives a reload");
+                string receiptPath=Path.Combine(root,"claude-usage.json"),saved=File.ReadAllText(receiptPath);
+                Check(!saved.Contains("example.invalid")&&saved.Contains("queryAccount"),"Persisted query contains only an opaque account binding");
+                Check(settingsBefore.SequenceEqual(File.ReadAllBytes(settingsPath))&&configBefore.SequenceEqual(File.ReadAllBytes(configPath)),"Refresh does not rewrite widget settings or Claude hooks");
+
+                ClaudeQuotaService.ReadOverride=(distribution,directory,token)=>{throw ClaudeQuotaService.Problem("response");};
+                var failed=(Task)Call(fixture.Window,"ReadClaude");
+                Check(failed.IsCompleted&&!failed.IsFaulted&&!fixture.View.Busy,"A failed query releases busy state");
+                Check(fixture.View.Snapshot.Rows[0].RemainingPercent==75&&UsagePresentation.Describe(fixture.View,DateTimeOffset.Now).Stale,"Network/schema failure preserves prior values and labels them stale");
+                Check(File.ReadAllText(receiptPath)==saved&&fixture.View.RefreshSchedule.Failures==1,"Failure cannot overwrite the quota and starts backoff");
+                ClaudeQuotaService.ReadOverride=(distribution,directory,token)=>{throw ClaudeQuotaService.Problem("account");};
+                Call(fixture.Window,"ReadClaude");
+                Check(fixture.View.Snapshot==null&&fixture.View.Error!=null,"An account mismatch hides the previous account's quota");
+                Check(File.ReadAllText(receiptPath)==saved,"Account mismatch preserves the original on-disk receipt");
+                ClaudeQuotaService.ReadOverride=(distribution,directory,token)=>Task.FromResult(DirectQuota());
+                Call(fixture.Window,"ReadClaude");
+                Check(fixture.View.Snapshot!=null&&fixture.View.Error==null&&fixture.View.RefreshSchedule.Failures==0,"A verified retry restores quota and clears failure backoff");
+            }
+        }finally{ClaudeQuotaService.ReadOverride=prior;}
+    }
     [STAThread]
     public static int Main()
     {
         ClaudeUsageService.BridgeProbeOverride = (info, token) => System.Threading.Tasks.Task.FromResult("ok");
+        ClaudeQuotaUiFixture.Install();
         string parent=Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         string root=Path.Combine(parent,"claude-receipt-test-"+Guid.NewGuid().ToString("N"));
         string oldHome=Environment.GetEnvironmentVariable("CODEX_HOME");
@@ -303,10 +353,12 @@ internal static class ClaudeReceiptUiTests
             MissingQuotaClearsPendingState(Path.Combine(root,"quota"));
             ExpiredForwardingCannotOptIn(Path.Combine(root,"forwarding"));
             FreeReceiptThenProRestore(Path.Combine(root,"restore"));
+            DirectRefreshAndRecovery(Path.Combine(root,"direct-refresh"));
             Console.WriteLine("Claude receipt UI tests passed: "+checks+" assertions. Hidden fixtures and isolated journal/config only; no accounts, network or visible notifications."); return 0;
         } catch(Exception error) { Console.Error.WriteLine(error); return 1; }
         finally {
             SettingsStore.DataDirectoryOverride=null; ClaudeUsageService.ConfigDirectoryOverride=null;
+            ClaudeQuotaService.ReadOverride=null;
             Environment.SetEnvironmentVariable("CODEX_HOME",oldHome);
             string full=Path.GetFullPath(root);
             if (full.StartsWith(parent.TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase) && Path.GetFileName(full).StartsWith("claude-receipt-test-",StringComparison.Ordinal) && Directory.Exists(full)) Directory.Delete(full,true);

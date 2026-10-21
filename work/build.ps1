@@ -1,6 +1,10 @@
 param([string]$OutputDirectory = (Join-Path $PSScriptRoot 'build'),[string]$MembershipConfig = '')
 $ErrorActionPreference = 'Stop'
 $sourceDirectory = Join-Path $PSScriptRoot 'src'
+$foreignSources = @(Get-ChildItem -LiteralPath $sourceDirectory -Filter 'Studio*.cs' -File)
+if ($foreignSources.Count -ne 0) {
+    throw 'widget-only-build: ADE source belongs in its separate product repository.'
+}
 $frameworkDirectory = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
 $compiler = Join-Path $frameworkDirectory 'csc.exe'
 if (-not (Test-Path -LiteralPath $compiler)) { throw 'Windows .NET Framework compiler not found.' }

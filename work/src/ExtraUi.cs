@@ -186,6 +186,7 @@ namespace UsageWidget
             ClaudeUsageResult result = null;
             string reason = null;
             if (!demo && claudeConfigured) { try { result = ClaudeUsageService.ReadLatest(settings.ClaudeWslDistribution,settings.ClaudeWindowsConfigDirectory); } catch (Exception ex) { reason = Friendly(ex); } }
+            if (claudeQueryRejectsReceipt) result = null;
             // Invalidate automatic alerts even when the card falls back to a
             // saved manual reading. Manual schedules and deduplication survive.
             if (result != null && !result.HasQuotaData && !result.HasExpiredWindows) {
@@ -201,6 +202,11 @@ namespace UsageWidget
                 RenderManual(claudeView,manual,"Claude 사용량 페이지를 확인하고 기록하세요."); return;
             }
             if (result == null) {
+                if (claudeQueryError != null) {
+                    claudeView.Source = "cli"; claudeView.Snapshot = null; claudeView.LastSuccess = null;
+                    claudeView.ReceiptState = ProviderReceiptState.None; claudeView.ReceiptObservedAt = null; claudeView.ReceiptMessage = null;
+                    ApplyClaudeQueryError(); Render(claudeView, false); AddRetryStatus(claudeView); return;
+                }
                 claudeView.Source = "code";
                 claudeView.Snapshot = null; claudeView.LastSuccess = null; claudeView.Error = null; claudeView.Issue = null;
                 claudeView.ReceiptState = ProviderReceiptState.Waiting; claudeView.ReceiptObservedAt = null;
@@ -223,20 +229,22 @@ namespace UsageWidget
         private void RenderClaudeRecord(ClaudeUsageResult result)
         {
             claudeUnavailableAt = null; claudeUnavailableSource = null; claudeUnavailableJournal = null;
-            claudeView.Source = "code";
+            claudeView.Source = result.IsDirectQuery ? "cli" : "code";
             claudeView.Snapshot = result.Snapshot; claudeView.LastSuccess = result.ObservedAt; claudeView.Error = null; claudeView.Issue = null;
+            ApplyClaudeQueryError();
             claudeView.ReceiptState = result.HasExpiredWindows ? ProviderReceiptState.ResetWaiting : ProviderReceiptState.Received;
             claudeView.ReceiptObservedAt = result.ObservedAt; claudeView.ReceiptMessage = null;
-            if (claudeConfigured) ObserveUsage(claudeView,ClaudeUsageSource());
+            if (claudeConfigured && claudeQueryError == null) ObserveUsage(claudeView,ClaudeUsageSource());
             Render(claudeView,false);
             var state = UsagePresentation.Describe(claudeView,DateTimeOffset.Now);
             bool old = state.Stale;
             claudeView.Badge.Text = !claudeConfigured ? "연결 해제" : state.Label;
             claudeView.Badge.Visibility = !claudeConfigured || state.Warning ? Visibility.Visible : Visibility.Collapsed;
             claudeView.Body.Opacity = 1;
-            claudeView.Body.Children.Add(T("마지막 수신 " + result.ObservedAt.ToLocalTime().ToString("MM/dd HH:mm"),10,"#647070",FontWeights.Normal,new Thickness(0,5,0,0)));
+            claudeView.Body.Children.Add(T((result.IsDirectQuery ? "마지막 확인 " : "마지막 수신 ") + result.ObservedAt.ToLocalTime().ToString("MM/dd HH:mm"),10,"#647070",FontWeights.Normal,new Thickness(0,5,0,0)));
             if (!claudeConfigured) claudeView.Body.Children.Add(T("연결 해제 · 마지막 수신 기록입니다.",11,"#91501F",FontWeights.Normal));
-            else if (old) claudeView.Body.Children.Add(T("Claude Code에서 새 응답 후 갱신됩니다.",10,"#91501F",FontWeights.Normal));
+            else if (old) claudeView.Body.Children.Add(T(result.IsDirectQuery ? "새로고침하여 현재 잔여량을 확인하세요." : "Claude Code에서 새 응답 후 갱신됩니다.",10,"#91501F",FontWeights.Normal));
+            AddRetryStatus(claudeView);
         }
 
         private void RenderManual(ProviderView view, ManualUsageRecord record, string empty)
@@ -471,6 +479,7 @@ namespace UsageWidget
             try { SettingsStore.Save(settings); }
             catch { settings.ClaudeWslDistribution = previous; settings.ClaudeWindowsConfigDirectory = previousDirectory; settings.ClaudeUseExistingStatusLine = previousExisting; throw; }
             ForgetUsageService("claude");
+            claudeQueryError = null; claudeQueryRejectsReceipt = false;
             claudeView.Snapshot = null; claudeView.LastSuccess = null; claudeView.Error = null; claudeView.Issue = null;
             claudeView.ReceiptState = ProviderReceiptState.None; claudeView.ReceiptObservedAt = null; claudeView.ReceiptMessage = null;
         }
@@ -481,11 +490,11 @@ namespace UsageWidget
             support.Children.Add(ConnectionText("자동 잔량 연동 · Claude Pro·Max",14,"#252827",FontWeights.SemiBold));
             support.Children.Add(ConnectionText("Claude Free는 자동 잔량 연동을 지원하지 않습니다. Free·API 키·웹 사용자는 아래 수동 기록을 이용해 주세요.",11,"#566369",FontWeights.Normal,new Thickness(0,5,0,0)));
             body.Children.Add(new LocalizedBorder { Child = support, Background = BrushOf("#F2F3EF"), CornerRadius = new CornerRadius(6), Padding = new Thickness(12), Margin = new Thickness(0,0,0,10) });
-            ConnectionSteps(body,"Claude Code 연결 · API 키 불필요","Claude Code에서 Pro 또는 Max 계정으로 로그인하세요.","‘Claude Code 연결’을 누른 뒤 Claude Code를 다시 열어 주세요.","다음 응답을 받으면 한도가 전달됩니다. ‘수신 확인’으로 확인하세요.");
+            ConnectionSteps(body,"Claude Code 연결 · API 키 불필요","Claude Code에서 Pro 또는 Max 계정으로 로그인하세요.","‘Claude Code 연결’을 눌러 선택한 환경을 연결하세요.","Claude Code 2.1.304 이상은 대화 없이 ‘잔여량 조회’와 위젯 새로고침으로 확인할 수 있습니다.");
             var environment = AddConnectionEnvironment(body,"claude",settings.ClaudeWslDistribution);
             var actions = new WrapPanel();
             var connect = new LocalizedButton { ContentTemplate = ActionTextTemplate(), FontSize = 14, MinHeight = 38, Content = "Claude Code 연결", Margin = new Thickness(0,0,8,8) };
-            var check = new LocalizedButton { ContentTemplate = ActionTextTemplate(), FontSize = 14, MinHeight = 38, Content = "수신 확인", Margin = new Thickness(0,0,0,8) };
+            var check = new LocalizedButton { ContentTemplate = ActionTextTemplate(), FontSize = 14, MinHeight = 38, Content = "잔여량 조회", Margin = new Thickness(0,0,0,8) };
             var disconnect = new LocalizedButton { ContentTemplate = ActionTextTemplate(), FontSize = 14, MinHeight = 38, Content = "위젯 연결 해제", HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0,12,0,0) };
             actions.Children.Add(connect); actions.Children.Add(check); body.Children.Add(actions);
             var feedback = MakeConnectionFeedback(body);
@@ -504,14 +513,14 @@ namespace UsageWidget
             }); advanced.Children.Add(browseDirectory);
             var existing = new LocalizedCheckBox { Content = "기존 상태 표시줄에서 수신", IsChecked = settings.ClaudeUseExistingStatusLine, Margin = new Thickness(0,12,0,8) };
             advanced.Children.Add(existing);
-            advanced.Children.Add(ConnectionText("기존 스크립트가 아래 명령에도 같은 JSON 입력을 전달하도록 설정한 뒤 체크하고 ‘수신 확인’을 누르세요. 기존 상태 표시줄은 변경하지 않습니다.",11,"#647070",FontWeights.Normal));
+            advanced.Children.Add(ConnectionText("기존 상태 표시줄을 유지하려면 체크한 뒤 ‘잔여량 조회’를 누르세요. 아래 명령으로 같은 JSON 입력을 전달하면 기존 응답 수신도 함께 사용할 수 있습니다.",11,"#647070",FontWeights.Normal));
             var copyCommand = SmallAction("수신 명령 복사",async () => {
                 if (demo || claudeConnectionBusy) return;
                 try {
                     string command = await ClaudeUsageService.GetStatusLineCommandAsync(exe,environment.Distribution,configDirectory.Text.Trim());
                     if (exiting) return;
                     Clipboard.SetText(command);
-                    Feedback(feedback,"수신 명령을 복사했습니다","기존 스크립트에서 같은 JSON 입력을 이 명령에 전달한 뒤 ‘수신 확인’을 누르세요.",false);
+                    Feedback(feedback,"수신 명령을 복사했습니다","기존 스크립트에서 같은 JSON 입력을 이 명령에 전달하면 응답 수신도 함께 사용할 수 있습니다.",false);
                 } catch (Exception ex) { if (!exiting) FeedbackIssue(feedback,"claude",ex); }
             }); advanced.Children.Add(copyCommand);
             Details(body,"고급 연결 · 설정 폴더 · 기존 상태 표시줄",advanced);
@@ -535,14 +544,14 @@ namespace UsageWidget
                 }
                 try {
                     var result = ClaudeUsageService.ReadLatest(target,directory);
-                    bool expired = result.HasExpiredWindows || DateTimeOffset.Now - result.ObservedAt > TimeSpan.FromMinutes(30);
+                    bool expired = result.HasExpiredWindows || DateTimeOffset.Now - result.ObservedAt > TimeSpan.FromMinutes(result.IsDirectQuery ? 10 : 30);
                     bool candidate = !IsSavedClaudeTarget(target,directory) || useExisting != settings.ClaudeUseExistingStatusLine;
-                    Feedback(feedback,expired ? "이전 수신값 · 새 응답 대기" : !result.HasQuotaData ? "수신됨 · 한도 미제공" : candidate ? "수신 확인 후 연결을 저장하세요" : "사용량 수신 완료",
-                        !expired && !result.HasQuotaData ? ClaudeQuotaUnavailable : "마지막 수신 " + result.ObservedAt.ToLocalTime().ToString("MM/dd HH:mm") + (expired ? "\nClaude Code를 다시 열고 다음 응답을 받은 뒤 확인하세요." : candidate ? "\n‘수신 확인’을 누르면 선택한 환경을 저장합니다." : "\n이후 Claude Code 응답에서 자동 갱신됩니다."),expired);
+                    Feedback(feedback,expired ? "이전 값 · 새로고침 필요" : !result.HasQuotaData ? "수신됨 · 한도 미제공" : candidate ? "잔여량 조회 후 연결을 저장하세요" : result.IsDirectQuery ? "잔여량 조회 완료" : "사용량 수신 완료",
+                        !expired && !result.HasQuotaData ? ClaudeQuotaUnavailable : (result.IsDirectQuery ? "마지막 확인 " : "마지막 수신 ") + result.ObservedAt.ToLocalTime().ToString("MM/dd HH:mm") + (expired ? "\n‘잔여량 조회’로 현재 한도를 확인하세요." : candidate ? "\n‘잔여량 조회’를 누르면 선택한 환경을 저장합니다." : result.IsDirectQuery ? "\n새로고침으로 대화 없이 잔여량을 갱신합니다." : "\n기존 응답 수신도 유지하며 새로고침으로 직접 조회할 수 있습니다."),expired);
                 } catch (ConnectionException ex) {
                     FeedbackIssue(feedback,"claude",ex);
                 } catch {
-                    Feedback(feedback,"연결 설정됨 · 첫 수신 대기","Claude Code를 다시 열고 다음 응답을 받은 뒤 ‘수신 확인’을 누르세요. 계속 비어 있으면 구독 로그인과 아래 ‘연결 문제 해결’을 확인하세요.",false);
+                    Feedback(feedback,"연결 설정됨 · 조회 대기","‘잔여량 조회’로 대화 없이 현재 한도를 확인하세요. Claude Code 2.1.304 이상과 구독 로그인이 필요합니다.",false);
                 }
             };
             Action<bool> busy = value => {
@@ -592,19 +601,20 @@ namespace UsageWidget
                 IDisposable lease;
                 if (!TryReserveServiceConnection("claude",out lease)) return;
                 busy(true);
+                Feedback(feedback,"잔여량 조회 중…","질문을 보내지 않고 Claude 구독 한도를 확인합니다.",false);
                 try {
                     await WaitForServiceRefreshAsync("claude",ServiceConnectionsToken);
-                    ThrowIfServiceConnectionChanged("claude",lease);
-                    if (String.IsNullOrEmpty(target)) await ClaudeUsageService.VerifyWindowsBridgeAsync(exe,directory,ServiceConnectionsToken);
                     ThrowIfServiceConnectionChanged("claude",lease);
                     await ClaudeUsageService.RefreshStatusLineAsync(exe,target,directory);
                     if (exiting) return;
                     ThrowIfServiceConnectionChanged("claude",lease);
                     if (!IsClaudeConfigured(exe,target,directory,useExisting)) { busy(false); update(); return; }
-                    var received = ClaudeUsageService.ReadLatest(target,directory);
-                    if (received.HasExpiredWindows || DateTimeOffset.Now - received.ObservedAt > TimeSpan.FromMinutes(30))
-                        throw new InvalidOperationException("Claude Code 연결 후 대화를 시작하면 사용량이 표시됩니다.");
+                    var received = await claudeQuota.ReadAsync(target,directory,ServiceConnectionsToken);
+                    ThrowIfServiceConnectionChanged("claude",lease);
                     SaveClaudeEnvironment(target,directory,useExisting);
+                    string source = String.IsNullOrEmpty(target) ? ClaudeUsageService.GetWindowsSourceId(directory) : ClaudeUsageService.GetSourceId(target);
+                    if (!ClaudeUsageService.CaptureJson(received.QuotaJson,received.ObservedAt,source,received.AccountFingerprint)) throw new InvalidOperationException("Claude 사용량 기록이 사용 중입니다. 잠시 후 다시 조회해 주세요.");
+                    claudeQueryError = null; claudeQueryRejectsReceipt = false; RefreshSucceeded(claudeView);
                     ForgetUsageService("claude");
                     configDirectory.Text = settings.ClaudeWindowsConfigDirectory;
                     claudeConfigured = true;

@@ -13,6 +13,7 @@ foreach ($reference in @('PresentationFramework.dll', 'PresentationCore.dll', 'W
 }
 $arguments += @(Get-ChildItem -LiteralPath $sourceDirectory -Filter '*.cs' | ForEach-Object { $_.FullName })
 $arguments += Join-Path $testDirectory 'claude-environment-ui-tests.cs'
+$arguments += Join-Path $testDirectory 'claude-quota-fixture.cs'
 & $compiler @arguments
 if ($LASTEXITCODE -ne 0) { throw 'Claude environment UI tests did not compile.' }
 & $testExecutable

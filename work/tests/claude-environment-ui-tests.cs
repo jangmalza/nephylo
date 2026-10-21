@@ -96,8 +96,9 @@ internal static class ClaudeEnvironmentUiTests
 
             string quota = "{\"rate_limits\":{\"five_hour\":{\"used_percentage\":25,\"resets_at\":253402300000}}}";
             ClaudeUsageService.CaptureJson(quota, DateTimeOffset.UtcNow, source);
-            Click(Button(editor, "수신 확인"));
+            Click(Button(editor, "잔여량 조회"));
             Check(Field<ServicePlan>(window, "servicePlan").IsActive("codex") && (bool)Call(window,"IsServiceActive","claude"), "Receipt verification makes Claude usable alongside Codex");
+            Check(Field<ProviderView>(window,"claudeView").Snapshot!=null,"Selected-profile query produces a snapshot before rendering values");
             Check(Field<ProviderView>(window, "claudeView").Snapshot.Rows[0].RemainingPercent == 75, "Verified UI shows the isolated source quota");
 
             // Simulate Windows startup where the launching shell's variable is gone.
@@ -129,6 +130,7 @@ internal static class ClaudeEnvironmentUiTests
     public static int Main()
     {
         ClaudeUsageService.BridgeProbeOverride = (info, token) => System.Threading.Tasks.Task.FromResult("ok");
+        ClaudeQuotaUiFixture.Install();
         string parent = Path.GetFullPath(Path.GetDirectoryName(typeof(ClaudeEnvironmentUiTests).Assembly.Location));
         string isolated = Path.Combine(parent, "claude-environment-ui-test-data-" + Guid.NewGuid().ToString("N"));
         string priorClaude = Environment.GetEnvironmentVariable("CLAUDE_CONFIG_DIR");
@@ -149,6 +151,7 @@ internal static class ClaudeEnvironmentUiTests
             SettingsStore.DataDirectoryOverride = null;
             SettingsStore.StartupRegistrySubKeyOverride = null;
             ClaudeUsageService.ConfigDirectoryOverride = null;
+            ClaudeQuotaService.ReadOverride = null;
             string full = Path.GetFullPath(isolated);
             if (full.StartsWith(parent.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
                 && Path.GetFileName(full).StartsWith("claude-environment-ui-test-data-", StringComparison.Ordinal) && Directory.Exists(full))

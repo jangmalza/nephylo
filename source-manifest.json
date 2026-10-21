@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "sourceCommit": "220b5d0e8908e4c5180fb2baebe213180ab10550",
+  "sourceCommit": "a38473426b678057e61e00f30e1ceae762cd009a",
   "includesWorkingTreeChanges": false,
   "gitHistoryIncluded": false,
   "releaseBinariesIncluded": false,
@@ -88,13 +88,13 @@
     },
     {
       "path": "docs/OPEN-SOURCE.md",
-      "bytes": 5689,
-      "sha256": "3485a3524aa9e8c69c05775111f9116a73d50cb081b8891a4b7e1975ff5bb275"
+      "bytes": 6128,
+      "sha256": "e96c6478c53672fc679a39d4c3e40c4fff1c6d1f5ecbd0d3d575bd0bfb7f6227"
     },
     {
       "path": "docs/PUBLIC-README.md",
-      "bytes": 21368,
-      "sha256": "a626c9d42a46c49c6a2555c2a836b7994601ef1ce003f897d7e0f14571180b85"
+      "bytes": 23370,
+      "sha256": "121a60660a2b5ffcc600786da3917d30e31af5bbc0e2a8955fca242ffe34a17c"
     },
     {
       "path": "docs/public/MEMBERSHIP.md",
@@ -128,13 +128,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 21357,
-      "sha256": "6b14cc4661202608fee7c84feaecab8cd3f82371fdf35104f6b0838fb4a7ff9d"
+      "bytes": 23337,
+      "sha256": "02d8bd4a046d01f39e9aa608fe027c8a3dc6a58462cbe2e195f703a4d2623a09"
     },
     {
       "path": "scripts/check-public-source.mjs",
-      "bytes": 2401,
-      "sha256": "8fe77cf113409a3e372708704d77e89d644c76533e353a3598a6ced79dda73dc"
+      "bytes": 2704,
+      "sha256": "a9ee86539d3f02b4522b2a7ca5ba04ea202c40a146c76d8dea002d0be642a445"
     },
     {
       "path": "scripts/configure-account.mjs",
@@ -143,13 +143,13 @@
     },
     {
       "path": "scripts/open-source.test.mjs",
-      "bytes": 7148,
-      "sha256": "ac6b2f19f840d230e5086504b7ce01643fdabdc63b5c254794703efe430950b2"
+      "bytes": 9266,
+      "sha256": "bf777fc2f677cbac91b178e138f52e39a30c482e5148a799979fb62ac8234791"
     },
     {
       "path": "scripts/prepare-open-source.mjs",
-      "bytes": 9108,
-      "sha256": "f2ccf723abfd9c97a6325dfb1e6c909420ed1e1726a0b65c6bafa63031c5aeb3"
+      "bytes": 9422,
+      "sha256": "867c5d5c81c3a342d1c6ce60540f526e84feaa89ea671783adc578ae84ed63f8"
     },
     {
       "path": "THIRD-PARTY-NOTICES.txt",
@@ -223,8 +223,8 @@
     },
     {
       "path": "work/build.ps1",
-      "bytes": 3948,
-      "sha256": "15313075dbbe4d9eb9ac3cee9698daba60b1462281db1f34f90de4c2e5dc1493"
+      "bytes": 4167,
+      "sha256": "15472739f18bde46c913aa75b09857d61acdbdacfd996dda7033051f16871d13"
     },
     {
       "path": "work/compose-notices.ps1",
@@ -443,13 +443,8 @@
     },
     {
       "path": "work/README.txt",
-      "bytes": 21357,
-      "sha256": "6b14cc4661202608fee7c84feaecab8cd3f82371fdf35104f6b0838fb4a7ff9d"
-    },
-    {
-      "path": "work/run-ade-dev.ps1",
-      "bytes": 2685,
-      "sha256": "ffea6bf84584f20fc3a407d256f596b75744f1ac30f9dc302d98604d1fb8850e"
+      "bytes": 23337,
+      "sha256": "02d8bd4a046d01f39e9aa608fe027c8a3dc6a58462cbe2e195f703a4d2623a09"
     },
     {
       "path": "work/sign-release.ps1",
@@ -492,9 +487,19 @@
       "sha256": "3c5eea19425455c878b5c63f0fa09c3fcafeab5144cb6f707e33b57ac879c60e"
     },
     {
+      "path": "work/src/ClaudeQuota.cs",
+      "bytes": 20121,
+      "sha256": "149d974229d8aab8c6e791ac8df5259887df1590501c63a6ca2bdb96c62e218c"
+    },
+    {
+      "path": "work/src/ClaudeQuotaUi.cs",
+      "bytes": 2487,
+      "sha256": "9a36ed98210fe331b05eee926c2c695ff6ddd6bf7c59d486f8d10d4d070e5199"
+    },
+    {
       "path": "work/src/ClaudeUsage.cs",
-      "bytes": 39067,
-      "sha256": "fc26a6058a1ddf0fa678b58520eb020adf482a7531c318ad22acbd3fdc108067"
+      "bytes": 40346,
+      "sha256": "f5c637fd10e8db61765d24b1369fca20b18e1089c5bfbef1865706dab380fd39"
     },
     {
       "path": "work/src/CodexInstallationDiscovery.cs",
@@ -578,8 +583,8 @@
     },
     {
       "path": "work/src/ExtraUi.cs",
-      "bytes": 61205,
-      "sha256": "9a34fe0e13d6f7a7b9f2dbfa53f79a48442453c7da9c7599be8165dee8024243"
+      "bytes": 62550,
+      "sha256": "2c7e623a1f9bcbd6d0b627964458e4be944575ecf10ab124eaf90cc749a58e54"
     },
     {
       "path": "work/src/HiggsfieldUi.cs",
@@ -593,8 +598,8 @@
     },
     {
       "path": "work/src/Localization.cs",
-      "bytes": 201853,
-      "sha256": "b4303e6ad714b8a7685bc21ad02a3670b13d13c967f72e6a3a301744b12df9b4"
+      "bytes": 206747,
+      "sha256": "95839dcebbdcafdf8cfe0a9cadf952af7c81e5b4fd613dca5cb4840ec2b05adb"
     },
     {
       "path": "work/src/ManagementUi.cs",
@@ -628,8 +633,8 @@
     },
     {
       "path": "work/src/Program.cs",
-      "bytes": 56059,
-      "sha256": "a4484a009971a180016a1134dfac2b66502418888dc10af0df543c35a3d34343"
+      "bytes": 56434,
+      "sha256": "7d915301b5280629fe508298faf69349c7c9bf0958c3757c352267696c39c55a"
     },
     {
       "path": "work/src/ProviderRefreshSchedule.cs",
@@ -672,176 +677,6 @@
       "sha256": "b64244470de516ea8e34a4e5c8b7a7c4aa40d504939c2b90de448a60d936258d"
     },
     {
-      "path": "work/src/StudioAgentClient.cs",
-      "bytes": 1540,
-      "sha256": "6c99be38b61f6d1056cde83cdaa6fe65cb01f99df25cc803fced2847a3eb27d8"
-    },
-    {
-      "path": "work/src/StudioClaudeClient.cs",
-      "bytes": 27975,
-      "sha256": "a507397e19b386d92bbabb58cfcf16ede312b1d3f8b7468b40ce2aad2811f098"
-    },
-    {
-      "path": "work/src/StudioClaudeQuota.cs",
-      "bytes": 10077,
-      "sha256": "0e648763f248f313b5b75da47be3d417dc19e49e5fd6eac057240cad8f2d8103"
-    },
-    {
-      "path": "work/src/StudioCodexClient.cs",
-      "bytes": 16546,
-      "sha256": "3dfe538f12399bfe471d92c81934ea535593b49e7fa9721659077d483d92b76b"
-    },
-    {
-      "path": "work/src/StudioComposerUi.cs",
-      "bytes": 4209,
-      "sha256": "075f0c7ab417b4c8bde7c611d825184845ace0a8d9fbbb756d011b4db07ccaca"
-    },
-    {
-      "path": "work/src/StudioDecisionClient.cs",
-      "bytes": 9919,
-      "sha256": "3304aca4cf5b70a358acd2a154daf56573ad4273b0a83c0185ce784a7ac550f2"
-    },
-    {
-      "path": "work/src/StudioDetailsUi.cs",
-      "bytes": 5037,
-      "sha256": "b4abd56599859e1887b1a8c909de7bf503f6838f0df82aa5b87db768bd19ed8a"
-    },
-    {
-      "path": "work/src/StudioDevelopmentMode.cs",
-      "bytes": 11388,
-      "sha256": "b9ee7b682a83d7aab8ad7eff4966937c67b9ba491da16c681b9882b0f20184bf"
-    },
-    {
-      "path": "work/src/StudioFailure.cs",
-      "bytes": 12393,
-      "sha256": "307cfa0a682ffa86378bbccdb10151a1e382a01e5dc6720420775e2ade195fbf"
-    },
-    {
-      "path": "work/src/StudioGeminiApiClient.cs",
-      "bytes": 23325,
-      "sha256": "0237096d6a5363a3cec097008a47dace2560154b8e5d4a7a11deb84fb147a814"
-    },
-    {
-      "path": "work/src/StudioGeminiCliClient.cs",
-      "bytes": 33635,
-      "sha256": "e7faf1a3eb64d948fb6bc3af22c535a901bba0eed659a4144be1c3a957fce465"
-    },
-    {
-      "path": "work/src/StudioGeminiSecrets.cs",
-      "bytes": 4227,
-      "sha256": "a96a6c60798f6017ce89d08f75f29df62de66b24040978ed67cceb8b27bb8e86"
-    },
-    {
-      "path": "work/src/StudioGeminiUi.cs",
-      "bytes": 5958,
-      "sha256": "fb9f915a58d6b6a6d9c522eb388925db838c0a8062bd0281b30d826a3631497a"
-    },
-    {
-      "path": "work/src/StudioHandoff.cs",
-      "bytes": 20229,
-      "sha256": "4f27d459047350ef0af8774b0330c6f5bdabfd372186d4278dc6ebfb6b2bbee6"
-    },
-    {
-      "path": "work/src/StudioHandoffUi.cs",
-      "bytes": 38183,
-      "sha256": "f02b602f44d3053f8c00a00162d6218c649ac21f0605aabf8002d86f00b95fe4"
-    },
-    {
-      "path": "work/src/StudioLayout.cs",
-      "bytes": 26511,
-      "sha256": "27b249868d0545950a3a2cd5ec376e398400135b90d5a8161e3f484e0b26cfe9"
-    },
-    {
-      "path": "work/src/StudioMainUi.cs",
-      "bytes": 34865,
-      "sha256": "76342bd8e5c79520d13739e6421d5c5dbba880dc079d0c0391e48e5ca04cabd3"
-    },
-    {
-      "path": "work/src/StudioMessageView.cs",
-      "bytes": 36292,
-      "sha256": "6daa511f61235cf054e54c08db4e154eeed534d2883d23dbf33830990b7f3f11"
-    },
-    {
-      "path": "work/src/StudioMotion.cs",
-      "bytes": 8552,
-      "sha256": "ec0aab4e8b34ba74a3ebdc56a998cfe3d79eab75917910ecabcac9d4e8bf4b1b"
-    },
-    {
-      "path": "work/src/StudioPresentation.cs",
-      "bytes": 17562,
-      "sha256": "455e9f94d281ab4e35e9eaacf80df40a5abdb77120836bfb3949dac43f26e474"
-    },
-    {
-      "path": "work/src/StudioProviderCatalog.cs",
-      "bytes": 2384,
-      "sha256": "0535f6837563b4dedcd44c7193b537afc742c4f72d9c7b893a11296b2ab16645"
-    },
-    {
-      "path": "work/src/StudioProviders.cs",
-      "bytes": 20714,
-      "sha256": "0505596fcf20e47b39ce515a80c5e5ba80f7e8ccd0209a87335cd3171b99e303"
-    },
-    {
-      "path": "work/src/StudioQuota.cs",
-      "bytes": 12557,
-      "sha256": "4f5ee0d11a3a7f517b265a297de3cde022f00d78f6be57757236936d8972bcf7"
-    },
-    {
-      "path": "work/src/StudioRenameUi.cs",
-      "bytes": 8000,
-      "sha256": "4e4aa473b0649fe7cbc46bd744fd21beb2655cd3d428c15fdb334ba38698bcf1"
-    },
-    {
-      "path": "work/src/StudioRouting.cs",
-      "bytes": 10754,
-      "sha256": "8e33701a9d018b6b3883dc9230473f9c85bb80de62f4b6df5b5790d962c315e4"
-    },
-    {
-      "path": "work/src/StudioRoutingSelection.cs",
-      "bytes": 8168,
-      "sha256": "99d9a98a3dcb02946859f85dd25d276cbc35bbffaec0b016c281f50f539c7654"
-    },
-    {
-      "path": "work/src/StudioRoutingSettingsUi.cs",
-      "bytes": 9568,
-      "sha256": "24b294bb2e0517056f4f204102284e00e084ee3f36a5476e446e12be85232f7e"
-    },
-    {
-      "path": "work/src/StudioRoutingStore.cs",
-      "bytes": 5218,
-      "sha256": "2d56d40caa3b1d12c0252c62d4dabcffec574adc9457772ef1cb2a184bf0bc79"
-    },
-    {
-      "path": "work/src/StudioRoutingUi.cs",
-      "bytes": 22986,
-      "sha256": "88430153f776bb3572a9b4764a20d438f72ac9dcf763a8e956a8373aaffc21bb"
-    },
-    {
-      "path": "work/src/StudioStore.cs",
-      "bytes": 16648,
-      "sha256": "d4aed583874a9620246c0a3cfac52ba214994fb016f13db66678d8a05f17dcf7"
-    },
-    {
-      "path": "work/src/StudioTaskUi.cs",
-      "bytes": 17908,
-      "sha256": "8877ba33c5dba88ef71ca8fc2d775ddb6c0b4f48fdb28be224e30e3381a64b22"
-    },
-    {
-      "path": "work/src/StudioUi.cs",
-      "bytes": 26515,
-      "sha256": "c4d27b04f50a73c9f0ab8e4506313e29266aea341cfabbeabd1b4ecee59f9443"
-    },
-    {
-      "path": "work/src/StudioVisuals.cs",
-      "bytes": 3426,
-      "sha256": "4a21d67e64312a42b08a7077d605e02fb24432c119f549c9e5bee017b76b366c"
-    },
-    {
-      "path": "work/src/StudioWorkspaceUi.cs",
-      "bytes": 23523,
-      "sha256": "8335ece1b5297143f031b8ac4b54fc161741879649c2a60c235b5780d02b70c5"
-    },
-    {
       "path": "work/src/UiLocalization.cs",
       "bytes": 7148,
       "sha256": "d8dc72877f36c76aa54a05477de3162c49cb2e620812b9c5c9348a6ca6e5a1da"
@@ -858,8 +693,8 @@
     },
     {
       "path": "work/src/UsagePresentation.cs",
-      "bytes": 5854,
-      "sha256": "f3725ebae17d24937da5cf2044ba449958c2972311d7c03049fc0efe5ec6f3c0"
+      "bytes": 5985,
+      "sha256": "e399f96c75e0f742ef8f17cc4708182968da380e57445d613d5b56d57b55e3d5"
     },
     {
       "path": "work/src/UsageRecoveryUi.cs",
@@ -913,8 +748,8 @@
     },
     {
       "path": "work/src/WidgetMenus.cs",
-      "bytes": 20015,
-      "sha256": "6a3a8f6d7d4371e1a00a55fce4c77810ea90c6089c9b8de048382116d9263c1d"
+      "bytes": 20018,
+      "sha256": "1b41bc857a96c465e82020761ccc04288778ef6d94cb7802052ec9a9703b0a48"
     },
     {
       "path": "work/src/WidgetMotion.cs",
@@ -948,8 +783,8 @@
     },
     {
       "path": "work/src/WidgetStatus.cs",
-      "bytes": 5179,
-      "sha256": "6107dfbcd5ca355153485658a18f07abf5066a4df11560c275caf0a8af1fea3d"
+      "bytes": 5190,
+      "sha256": "416e40acd476e1b2e30ea26e90a9813e82485be1e85dd67270e8017b7c6ff4d0"
     },
     {
       "path": "work/src/WidgetTheme.cs",
@@ -1018,33 +853,43 @@
     },
     {
       "path": "work/tests/claude-environment-ui-tests.cs",
-      "bytes": 9649,
-      "sha256": "035d54e9244d2ad19e78b95716474c196552911b28548e16be3b7fefd8d4a8b3"
+      "bytes": 9892,
+      "sha256": "932aa4b9afc1a5338762b6653bff8d5106ff3c1579287153ed1c875badf4fd42"
     },
     {
       "path": "work/tests/claude-environment-ui-tests.ps1",
-      "bytes": 1364,
-      "sha256": "1ccfd9034aedfaaa6d52b2f70b4cc3d171590bfdfb557f49b638ba29266949e0"
+      "bytes": 1430,
+      "sha256": "da6ce79e1d3cddf078e62ee8a92a79cdc1732e195274868465bfc883554811ab"
+    },
+    {
+      "path": "work/tests/claude-quota-fixture.cs",
+      "bytes": 1710,
+      "sha256": "23117909a67b91ef3461b814574f71e21f8ab5f40f16b6add908588c75264055"
+    },
+    {
+      "path": "work/tests/claude-quota-tests.cs",
+      "bytes": 13906,
+      "sha256": "70b2c8d8414954001f6336faf41739fc8b20eeca8b3c7dc2495ef38c7f17a424"
     },
     {
       "path": "work/tests/claude-receipt-ui-tests.cs",
-      "bytes": 25969,
-      "sha256": "aa81ab8c90a69a38251850b5855cd8083ab171f0b9dd8ae343b02b3cb585d991"
+      "bytes": 30901,
+      "sha256": "09206681442f9209f63ff742a19593b23ab1821ecc1b697f3d8f5a06994682ff"
     },
     {
       "path": "work/tests/claude-receipt-ui-tests.ps1",
-      "bytes": 1238,
-      "sha256": "e090410ec8b104d1817d9acad68e14ec77756bcc2b5bf06664f5f589df2b169a"
+      "bytes": 1303,
+      "sha256": "12da69fd72536c62e06833dfbe6bdc3d3b64939553eabaaaa12fec2269420872"
     },
     {
       "path": "work/tests/claude-tests.cs",
-      "bytes": 48485,
-      "sha256": "8ae7fa3406234055f8a3d48b70f09b6825566a1175bbe23b311232795ac42fe8"
+      "bytes": 48648,
+      "sha256": "26b47c07c7915f3acaa51c04db935b150e89b53370e5fc319b27eb5a586fddbb"
     },
     {
       "path": "work/tests/claude-tests.ps1",
-      "bytes": 1310,
-      "sha256": "339a3954055e9523d631ed1c6ff676ab340266e81d1d7f0f4ac76a89280aae8b"
+      "bytes": 1398,
+      "sha256": "724b18bb3b748e18a99fb551320602f1dcced68481085766f7104628ac4c104b"
     },
     {
       "path": "work/tests/codex-auto-connect-tests.cs",
@@ -1108,13 +953,13 @@
     },
     {
       "path": "work/tests/connection-flow-tests.cs",
-      "bytes": 36602,
-      "sha256": "41b32d411f197630dc925c7ca888ed6a70168799a6a5fc6230667321d57acf3c"
+      "bytes": 36742,
+      "sha256": "7b3209285aa54a65ee6565d014e8ac11555235806b6824539bc10c11c0445f73"
     },
     {
       "path": "work/tests/connection-flow-tests.ps1",
-      "bytes": 1335,
-      "sha256": "44141cdd07bab7ce924c6ad6df87c2da0ede0518a3526bc1d3bb16ca4576d0ff"
+      "bytes": 1401,
+      "sha256": "36ee5de7316329c6fa4bf37c47b2b5c1d3c64cb155f13b0c1ab9a5ffb5f40918"
     },
     {
       "path": "work/tests/connection-tests.cs",
@@ -1433,8 +1278,8 @@
     },
     {
       "path": "work/tests/run-ci-tests.ps1",
-      "bytes": 11370,
-      "sha256": "d839162e7e6f9ff6b55af4973f9784ae63d817a73d19c47234d8825eabfa3a48"
+      "bytes": 11239,
+      "sha256": "512702bf63ccdf008d9095635e5a989b0d4edb55b34da7da4f78c999254d34b2"
     },
     {
       "path": "work/tests/service-operation-tests.cs",
@@ -1470,126 +1315,6 @@
       "path": "work/tests/storage-tests.ps1",
       "bytes": 723,
       "sha256": "d4267961d8b78405514e0a529cf1d8fab4cfb7535da5da9753a75991bd229180"
-    },
-    {
-      "path": "work/tests/studio-claude-tests.cs",
-      "bytes": 40425,
-      "sha256": "4463d8c724d40536251f514e95f9dc2568dc06d506eddd6724ca439aecdaa591"
-    },
-    {
-      "path": "work/tests/studio-claude-tests.ps1",
-      "bytes": 1401,
-      "sha256": "e7a3cf6a442d8790067b93dfe1682693d3f4a1421cde6cf62b06dcba3b17bdb8"
-    },
-    {
-      "path": "work/tests/studio-development-tests.cs",
-      "bytes": 15782,
-      "sha256": "93835bae58e0262972be4c9c76b357683c000bddba8fa9268bbd21a8f302f54d"
-    },
-    {
-      "path": "work/tests/studio-development-tests.ps1",
-      "bytes": 1314,
-      "sha256": "c09d86ff0ff5e719abf3bb5444fa9758d0e18917e38f9b4e5a33d3179e81875b"
-    },
-    {
-      "path": "work/tests/studio-gemini-api-tests.cs",
-      "bytes": 19412,
-      "sha256": "cdb01f914a85e4c3f1ae808185feaad641870acceb3977cf669d9eaf46a7b37c"
-    },
-    {
-      "path": "work/tests/studio-gemini-api-tests.ps1",
-      "bytes": 1560,
-      "sha256": "836f199644ccfbbc923aab75b6f099a2d086c353f16404a7fdb8c91a7ec6305d"
-    },
-    {
-      "path": "work/tests/studio-gemini-cli-tests.cs",
-      "bytes": 20701,
-      "sha256": "2e04dee4b203a12e887663ef2555bdf6d3519a9f3a5b39facd756d293518eea5"
-    },
-    {
-      "path": "work/tests/studio-gemini-cli-tests.ps1",
-      "bytes": 1420,
-      "sha256": "d8891743e570e52c8fea87a7d49f8673a9a8d2755fc9a12dfcce39f52d6f6de7"
-    },
-    {
-      "path": "work/tests/studio-gemini-provider-tests.cs",
-      "bytes": 30589,
-      "sha256": "61d1ae7dc108342118a07da5ceaaccc598fd77e848379604b54da3767859b687"
-    },
-    {
-      "path": "work/tests/studio-gemini-provider-tests.ps1",
-      "bytes": 1369,
-      "sha256": "46ab1470d9661400e302b561214783ce881b89a3d45d6424a84d52b6ba9c367b"
-    },
-    {
-      "path": "work/tests/studio-handoff-tests.cs",
-      "bytes": 23374,
-      "sha256": "8f1c0fa0f0710e75fd2c9d3ccf9c99a66414bb0408192c2166e79216b92d13a8"
-    },
-    {
-      "path": "work/tests/studio-handoff-tests.ps1",
-      "bytes": 1096,
-      "sha256": "09022a4b6338f614a81e8be2bf26c2c620d0a258be10ba3a9a5a01be6a3dc32b"
-    },
-    {
-      "path": "work/tests/studio-message-tests.cs",
-      "bytes": 22499,
-      "sha256": "d0282a3a05af812d29e32d9e8ade2f7425147873bce1e8c07a24abc4bdfa1e93"
-    },
-    {
-      "path": "work/tests/studio-message-tests.ps1",
-      "bytes": 1487,
-      "sha256": "7d81a38dcdbccf6bdfed53122731eecebacc1545fd973d5c8346a3403670d469"
-    },
-    {
-      "path": "work/tests/studio-navigation-tests.cs",
-      "bytes": 8701,
-      "sha256": "c25bb641ca4f767223653d019b8666a2ce1ae23a9bd79adc47b8a122552c9414"
-    },
-    {
-      "path": "work/tests/studio-navigation-tests.ps1",
-      "bytes": 1126,
-      "sha256": "d4869e04b3e34965b00073ee909bd9bf62afc96bed5d14c3fa02c81d6ff043ee"
-    },
-    {
-      "path": "work/tests/studio-provider-tests.cs",
-      "bytes": 96731,
-      "sha256": "7fd3f979821b3ba240ae2218b4e4ede30e271813729724db058dd7f93a4d14ac"
-    },
-    {
-      "path": "work/tests/studio-provider-tests.ps1",
-      "bytes": 1335,
-      "sha256": "ef8d0bca8019d553d324315813d57924ef220a1053c5ade215060c6d1c68bd6e"
-    },
-    {
-      "path": "work/tests/studio-quota-tests.cs",
-      "bytes": 17390,
-      "sha256": "b4c94c53268abd2f000e5574306f756c90337676c96760ed07ce134c8bbe140b"
-    },
-    {
-      "path": "work/tests/studio-quota-tests.ps1",
-      "bytes": 1190,
-      "sha256": "c5e03bf9b63cf320d72ed7f5d8819e44bdbc04e02e9f9dbafa847dcf973abf42"
-    },
-    {
-      "path": "work/tests/studio-routing-tests.cs",
-      "bytes": 70428,
-      "sha256": "8b93480cc77ef6076a06e4d9cf3ee9b5f2f84c651061a5842b4449edd3b01333"
-    },
-    {
-      "path": "work/tests/studio-routing-tests.ps1",
-      "bytes": 1294,
-      "sha256": "f1d4da1233a96327b2642ae24fc1a3685c5bdc7ac7b9c327f35381c805fc8bb5"
-    },
-    {
-      "path": "work/tests/studio-tests.cs",
-      "bytes": 44818,
-      "sha256": "253c9d81db2e685cd4773b796c311fea558db3a44e10a40311157aba0051376c"
-    },
-    {
-      "path": "work/tests/studio-tests.ps1",
-      "bytes": 1294,
-      "sha256": "56c4bed41c0d29912fccf1e7bb185207869c00d41347ead7576fabc280c7f96b"
     },
     {
       "path": "work/tests/theme-tests.cs",
@@ -1670,6 +1395,16 @@
       "path": "work/tests/weekly-summary-ui-tests.ps1",
       "bytes": 1294,
       "sha256": "dd75c3b923f4fd5ebdca73803b8c73263b51dafb1d4cabff39f171a849fa740e"
+    },
+    {
+      "path": "work/tests/widget-isolation-tests.cs",
+      "bytes": 7385,
+      "sha256": "5caffb380e1cab3d126b8cbcf25ce5ed60f32d5944cb356c85f52a06fa4f260e"
+    },
+    {
+      "path": "work/tests/widget-isolation-tests.ps1",
+      "bytes": 3108,
+      "sha256": "36d5397af3395eb87cf3fe1799c527bd2b1231a928e704ca40c9bcb1eb9f5022"
     },
     {
       "path": "work/tests/widget-presentation-tests.cs",

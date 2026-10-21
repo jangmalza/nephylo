@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -17,6 +18,8 @@ namespace UsageWidget
         public DateTimeOffset ObservedAt;
         public bool HasExpiredWindows;
         public bool HasQuotaData;
+        public bool IsDirectQuery;
+        internal string AccountFingerprint, QuotaJson;
     }
 
     // Uses Claude Code's documented statusLine input, never browser cookies or OAuth credentials.
@@ -371,8 +374,9 @@ namespace UsageWidget
             return CaptureJson(json, observedAt, "");
         }
 
-        internal static bool CaptureJson(string json, DateTimeOffset observedAt, string sourceId)
+        internal static bool CaptureJson(string json, DateTimeOffset observedAt, string sourceId, string queryAccount = null)
         {
+            if (queryAccount != null && (queryAccount.Length != 64 || queryAccount.Any(c => !(c >= '0' && c <= '9') && !(c >= 'a' && c <= 'f')))) throw new ArgumentException("Invalid quota account fingerprint.");
             string cachePath = SourceCachePath(sourceId);
             if (json == null || Encoding.UTF8.GetByteCount(json) >= InputLimit) throw new InvalidOperationException("Status line input too large.");
             Dictionary<string, object> input = ReadObject(json);
@@ -387,6 +391,7 @@ namespace UsageWidget
                 { "rate_limits", clean }
             };
             if (!String.IsNullOrEmpty(sourceId)) cache["source"] = sourceId;
+            if (queryAccount != null) cache["queryAccount"] = queryAccount;
             using (var mutex = new Mutex(false, @"Local\UsageWidget.ClaudeUsage.v1" + (String.IsNullOrEmpty(sourceId) ? "" : "." + (sourceId.StartsWith("win:", StringComparison.Ordinal) ? "win." : "") + sourceId.Substring(4))))
             {
                 bool held = false;
@@ -434,6 +439,14 @@ namespace UsageWidget
                 ObservedAt = observed,
                 Snapshot = new UsageSnapshot { Plan = "CODE 수신", Note = "Claude Code 마지막 응답에서 받은 구독 한도입니다. 다른 기기에서 사용한 내용은 다음 응답 후 반영됩니다. 마지막 수신: " + observed.ToLocalTime().ToString("MM/dd HH:mm") }
             };
+            object queryAccount;
+            if (cache.TryGetValue("queryAccount", out queryAccount)) {
+                string fingerprint = queryAccount as string;
+                if (fingerprint == null || fingerprint.Length != 64 || fingerprint.Any(c => !(c >= '0' && c <= '9') && !(c >= 'a' && c <= 'f'))) throw new InvalidOperationException("Invalid quota account fingerprint.");
+                result.IsDirectQuery = true; result.AccountFingerprint = fingerprint;
+                result.Snapshot.Plan = "CODE 조회";
+                result.Snapshot.Note = "Claude Code에서 대화 없이 조회한 계정 구독 한도입니다. 마지막 확인: " + observed.ToLocalTime().ToString("MM/dd HH:mm");
+            }
             AddRow(result, clean, "five_hour", "5시간 한도", now);
             AddRow(result, clean, "seven_day", "주간 한도", now);
             foreach (var row in result.Snapshot.Rows) if (row.RemainingPercent.HasValue) result.HasQuotaData = true;
@@ -457,7 +470,7 @@ namespace UsageWidget
                     result.HasExpiredWindows = true;
                     row.RemainingPercent = null;
                     row.Label += " · 수신 대기";
-                    row.Detail += " · 초기화 시간이 지났습니다. 다음 Claude Code 응답 후 새 한도가 표시됩니다.";
+                    row.Detail += result.IsDirectQuery ? " · 초기화 시간이 지났습니다. 새로고침하여 새 한도를 확인하세요." : " · 초기화 시간이 지났습니다. 다음 Claude Code 응답 후 새 한도가 표시됩니다.";
                     row.ResetsAt = null;
                 }
             }

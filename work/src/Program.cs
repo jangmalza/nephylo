@@ -21,11 +21,16 @@ namespace UsageWidget
 {
     public static class Program
     {
+        internal static bool IsWidgetInvocation(string[] args)
+        {
+            return args != null && !args.Any(value => value != null && value.StartsWith("--ade-dev", StringComparison.Ordinal));
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
-            // Route development requests before any widget installer, migration or bridge work.
-            if (StudioDevelopmentMode.IsRequested(args)) { Environment.ExitCode = StudioDevelopmentMode.Run(args); return; }
+            // Retired development launchers must not fall through into a user's widget profile.
+            if (!IsWidgetInvocation(args)) { Console.WriteLine("Nephylo Widget: use the separate Nephylo ADE application."); Environment.ExitCode = 2; return; }
             if (AutoUpdateInstaller.TryRunWorker(args)) return;
             if (args.Contains("--install")) { WidgetInstallation.InstallInteractive(null,false); return; }
             if (args.Length == 1 && args[0] == "--claude-bridge-check") {
@@ -184,7 +189,6 @@ namespace UsageWidget
             timer.Start();
             StateChanged += (s, e) => { if (WindowState == WindowState.Minimized) { Hide(); WindowState = WindowState.Normal; } };
             Closing += async (s, e) => {
-                if (studioWindow != null && !studioWindow.TryCloseForOwner()) { e.Cancel = true; return; }
                 if (!shutdownFlushed && !demo) {
                     e.Cancel = true;
                     if (exiting) { e.Cancel = true; return; }
@@ -207,7 +211,6 @@ namespace UsageWidget
                 SystemParameters.StaticPropertyChanged -= MotionPreferenceChanged; StopWidgetMotion();
                 System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged -= NetworkAvailabilityChanged;
                 CloseDashboard();
-                if (studioWindow != null) studioWindow.Close();
                 if (settingsWindow != null) settingsWindow.Close();
                 if (servicesWindow != null) servicesWindow.Close();
                 if (historyWindow != null) historyWindow.Close();
@@ -508,13 +511,15 @@ namespace UsageWidget
             bool readEleven = IsServiceActive("eleven") && !IsServiceConnectionPending("eleven") && !String.IsNullOrWhiteSpace(secret) && elevenView.RefreshSchedule.CanAttempt(now,manual);
             bool readOpenAi = IsServiceActive("openai") && !IsServiceConnectionPending("openai") && IsExtraShown("openai") && !String.IsNullOrWhiteSpace(openAiKey) && openAiView.RefreshSchedule.CanAttempt(now,manual);
             bool readHiggsfield = IsServiceActive("higgsfield") && !IsServiceConnectionPending("higgsfield") && higgsfieldSettings.WebConnected && higgsfieldOperation == null && higgsfieldView.RefreshSchedule.CanAttempt(now,manual);
-            if (!readCodex && !readEleven && !readOpenAi && !readHiggsfield) {
+            bool readClaude = IsServiceActive("claude") && !IsServiceConnectionPending("claude") && !claudeConnectionBusy && IsSavedClaudeConfigured() && claudeView.RefreshSchedule.CanAttempt(now,manual);
+            if (!readCodex && !readEleven && !readOpenAi && !readHiggsfield && !readClaude) {
                 nextRefresh = now.AddSeconds(15);
                 Render(codexView,true); Render(elevenView,false); RefreshLocalExtras(); UpdateFooter(); return;
             }
             refreshing = true; automaticRefreshInProgress = !manual; refreshButton.IsEnabled = false;
             codexView.BackgroundRefresh = readCodex && !manual; elevenView.BackgroundRefresh = readEleven && !manual;
             openAiView.BackgroundRefresh = readOpenAi && !manual; higgsfieldView.BackgroundRefresh = readHiggsfield && !manual;
+            claudeView.BackgroundRefresh = readClaude && !manual;
             UpdateRefreshMotion();
             codexView.Busy = readCodex; elevenView.Busy = readEleven;
             Render(codexView,true); Render(elevenView,false);
@@ -524,6 +529,7 @@ namespace UsageWidget
             if (readEleven) reads.Add(ReadEleven());
             if (readOpenAi) reads.Add(ReadOpenAi());
             if (readHiggsfield) reads.Add(ReadHiggsfield());
+            if (readClaude) reads.Add(ReadClaude());
             // Extra providers set Busy when their readers start. Refresh shared
             // feedback afterwards so first reads still announce progress.
             UpdateFooter();
@@ -531,6 +537,7 @@ namespace UsageWidget
             finally {
                 refreshing = false; automaticRefreshInProgress = false;
                 codexView.BackgroundRefresh = elevenView.BackgroundRefresh = openAiView.BackgroundRefresh = higgsfieldView.BackgroundRefresh = false;
+                claudeView.BackgroundRefresh = false;
                 UpdateRefreshMotion(); nextRefresh = DateTimeOffset.Now.AddSeconds(15);
                 if (!exiting) { refreshButton.IsEnabled = true; Render(codexView,true); Render(elevenView,false); RefreshLocalExtras(); UpdateFooter(); }
                 QueueAutomaticRefresh();
@@ -588,7 +595,6 @@ namespace UsageWidget
             var menu = new Forms.ContextMenuStrip();
             menu.Items.Add("위젯 열기", null, (s,e) => Dispatcher.BeginInvoke(new Action(Reveal)));
             menu.Items.Add("대시보드 열기", null, (s,e) => Dispatcher.BeginInvoke(new Action(OpenDashboard)));
-            menu.Items.Add("Nephylo ADE 열기", null, (s,e) => Dispatcher.BeginInvoke(new Action(OpenStudio)));
             menu.Items.Add("새로고침", null, (s,e) => Dispatcher.BeginInvoke(new Action(async () => { if (!demo) await RefreshAsync(); })));
             menu.Items.Add("사용 이력", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenUsageHistory(); })));
             menu.Items.Add("주간 요약", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenWeeklySummary(); })));
@@ -702,7 +708,7 @@ namespace UsageWidget
                     settings = desired; Topmost = settings.AlwaysOnTop;
                     ApplyWidgetViewVisibility();
                     if (viewChanged) ApplyWidgetGeometry();
-                    if (intervalChanged) foreach (var view in new[] { codexView,elevenView,openAiView,higgsfieldView }) view.RefreshSchedule.ChangeInterval(DateTimeOffset.Now,settings.RefreshSeconds);
+                    if (intervalChanged) foreach (var view in new[] { codexView,elevenView,openAiView,higgsfieldView,claudeView }) view.RefreshSchedule.ChangeInterval(DateTimeOffset.Now,settings.RefreshSeconds);
                     ApplyLanguage(settings.Language);
                     RequestFitHeight();
                     if (!MotionAllowed) StopWidgetMotion(); else UpdateRefreshMotion();

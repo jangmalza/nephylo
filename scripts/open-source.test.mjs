@@ -33,8 +33,14 @@ test('export neutralizes account configuration and refuses an existing output',(
   const empty=JSON.stringify({SupabaseUrl:'',PublishableKey:'',GoogleEnabled:false,EmailEnabled:false});write('work/website/account-config.example.json',empty);
   write('work/website/dist/account/config.json',JSON.stringify({SupabaseUrl:'https://'+'a'.repeat(20)+'.supabase.co',PublishableKey:'public',GoogleEnabled:true,EmailEnabled:true}));
   write('work/src/Program.cs','// source');write('work/website/dist/downloads/Nephylo-Setup.exe','MZ');write('docs/releases/private.json','private evidence');write('.gitignore','outputs/\n');
+  const otherProductFiles=['work/src/StudioUi.cs','work/tests/studio-tests.ps1','work/run-ade-dev.ps1','docs/validation/studio-local-fixture.json','docs/validation/ade-fixture.json'];
+  for(const name of otherProductFiles)write(name,'// other product fixture');
   execFileSync('git',['add','.'],{cwd:repo,stdio:'pipe',windowsHide:true});execFileSync('git',['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture'],{cwd:repo,stdio:'pipe',windowsHide:true});
   const result=prepareOpenSource({repository:repo,output:'outputs/open-source/result'});
+  for(const name of otherProductFiles){
+   assert.equal(existsSync(path.join(result.directory,name)),false,'Other-product source is absent from the actual export');
+   assert.ok(result.excluded.some(item=>item.path===name&&item.reason==='other-product-source'));
+  }
   assert.equal(readFileSync(path.join(result.directory,'README.md'),'utf8'),'# Public source 1.25.21\n');
   assert.equal(readFileSync(path.join(result.directory,'.github/FUNDING.yml'),'utf8'),'github: jangmalza\n');
   assert.equal(readFileSync(path.join(result.directory,'docs/PUBLIC-README.md'),'utf8'),'# Public source {{SOURCE_VERSION}}\n');
@@ -57,8 +63,28 @@ test('export neutralizes account configuration and refuses an existing output',(
 });
 
 test('unknown source formats fail explicitly while private data remain excluded',()=>{
- assert.equal(publicSourcePath('work/run-ade-dev.ps1'),true,'Reviewed ADE development launcher stays with exported source');
+ for(const name of ['work/run-ade-dev.ps1','work/src/StudioUi.cs','work/src/StudioClaudeQuota.cs','work/tests/studio-tests.ps1','work/tests/studio-claude-tests.cs','docs/AI-STUDIO.md','docs/ADE-DEVELOPMENT.md','docs/validation/ade-fixture.json','docs/validation/studio-local-fixture.json']){
+  assert.equal(publicSourcePath(name),false,'ADE is not part of the Widget product: '+name);
+  assert.equal(exclusionReason(name),'other-product-source');
+ }
  for(const name of ['work/src/View.xaml','work/assets/prices.json','work/tests/fixture.json','work/new-helper.ps1','package.json','resources/NewView.resx'])assert.equal(exclusionReason(name),'unclassified-source');
  for(const name of ['work/tests/auth.json','outputs/backup.json','work/website/dist/downloads/Nephylo-Setup.exe'])assert.equal(exclusionReason(name),'private-or-generated');
  for(const name of ['work/configure-membership.ps1','work/package-release.ps1'])assert.equal(exclusionReason(name),'operational-or-private-document');
+});
+
+test('public candidate validation rejects ADE runtime and historical studio records',()=>{
+ const parent=path.resolve('outputs/oss-preparation-tests');mkdirSync(parent,{recursive:true});
+ const checker=path.resolve('scripts/check-public-source.mjs');
+ for(const forbidden of ['work/src/StudioUi.cs','work/tests/studio-tests.ps1','docs/validation/ade-fixture.json','docs/validation/studio-local-fixture.json']){
+  const candidate=mkdtempSync(path.join(parent,'mixed-product-'));
+  const write=(name,value)=>{mkdirSync(path.dirname(path.join(candidate,name)),{recursive:true});writeFileSync(path.join(candidate,name),value);};
+  write('LICENSE','MIT License\nCopyright (c) 2026 Nephylo contributors\n');
+  write('README.md','# Widget fixture\n');
+  write('work/website/dist/account/config.json',JSON.stringify({SupabaseUrl:'',PublishableKey:'',GoogleEnabled:false,EmailEnabled:false}));
+  write(forbidden,'// other product fixture');
+  assert.throws(()=>execFileSync(process.execPath,[checker,candidate],{stdio:'pipe',windowsHide:true}),error=>{
+   const detail=error.stderr?.toString()||'';
+   return error.status!==0&&detail.includes('Widget source contains another product: '+forbidden);
+  },'A mixed product must fail candidate validation: '+forbidden);
+ }
 });

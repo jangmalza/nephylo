@@ -387,7 +387,7 @@ internal static class ConnectionFlowTests
             Check(Descendants<TextBlock>(editor).Any(text => text.Text == "Claude 연결 명령 실행을 확인하지 못했습니다"), "Execution failure is not presented as normal receipt waiting");
             ClaudeUsageService.BridgeProbeOverride = (info, token) => Task.FromResult("ok");
             connect.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-            Check(Descendants<TextBlock>(editor).Any(text => text.Text == "연결 설정됨 · 첫 수신 대기"),
+            Check(Descendants<TextBlock>(editor).Any(text => text.Text == "연결 설정됨 · 조회 대기"),
                 "Installing the Claude hook does not claim that quota has already arrived");
             Check(File.Exists(Path.Combine(ClaudeUsageService.ConfigDirectoryOverride, "settings.json")),
                 "Claude connection writes only the explicitly redirected temporary config");
@@ -406,8 +406,8 @@ internal static class ConnectionFlowTests
                 "A real quota-shaped local fixture changes Claude feedback to received");
             ClaudeUsageService.CaptureJson(quota, DateTimeOffset.UtcNow.AddMinutes(-31));
             Call(window, "RefreshConnectionEditor", "claude");
-            Check(Descendants<TextBlock>(editor).Any(text => text.Text == "이전 수신값 · 새 응답 대기"),
-                "A stale local Claude record asks for a new response rather than claiming current usage");
+            Check(Descendants<TextBlock>(editor).Any(text => text.Text == "이전 값 · 새로고침 필요"),
+                "A stale local Claude record asks for a fresh query rather than claiming current usage");
             Call(window,"RefreshLocalExtras");
             Check((bool)Call(window,"IsExtraReady","claude"),"Installed Claude hook is connected even with stale cache");
             string configFile = Path.Combine(ClaudeUsageService.ConfigDirectoryOverride,"settings.json");
@@ -422,7 +422,7 @@ internal static class ConnectionFlowTests
             Check(!(bool)Call(window,"IsExtraReady","claude"),"Custom forwarding requires explicit user choice despite a cached receipt");
             var customChoice = Descendants<CheckBox>(editor).Single(box => Convert.ToString(box.Content) == "기존 상태 표시줄에서 수신");
             customChoice.IsChecked = true;
-            var receiptCheck = Descendants<Button>(editor).Single(button => Convert.ToString(button.Content) == "수신 확인");
+            var receiptCheck = Descendants<Button>(editor).Single(button => Convert.ToString(button.Content) == "잔여량 조회");
             receiptCheck.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             Check(widgetSettings.ClaudeUseExistingStatusLine && (bool)Call(window,"IsExtraReady","claude"),"Explicit custom bridge receipt verification persists acceptance and displays data");
             Check(Field<ProviderView>(window,"claudeView").Snapshot.Rows[0].RemainingPercent == 75,"Custom bridge renders actual fresh quota");
@@ -434,7 +434,7 @@ internal static class ConnectionFlowTests
             receiptCheck.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             Check(Field<ServicePlan>(window,"servicePlan").IsActive("codex"),"A received event without subscription quota never switches the current Free service");
             Check(((Task<UsageSnapshot>)Call(window,"VerifyServiceForSelection","claude")).GetAwaiter().GetResult() == null,"Top-level service verification does not accept unavailable quota");
-            Check(Descendants<TextBlock>(editor).Any(text => text.Text == "수신됨 · 한도 미제공"),"A successful custom receiver with no quota is explained without an endless retry prompt");
+            Check(Descendants<TextBlock>(editor).Any(text => text.Text.Contains("현재 Claude 계정은 구독 한도를 제공하지 않습니다")),"A query without subscription quota explains the support boundary and manual alternative");
             Field<ServicePlan>(window,"servicePlan").Select("claude"); Call(window,"RefreshLocalExtras");
             string cachePath = Path.Combine(isolated,"claude-usage.json");
             string cacheBeforeDisconnect = File.ReadAllText(cachePath);
@@ -511,6 +511,7 @@ internal static class ConnectionFlowTests
     public static int Main()
     {
         ClaudeUsageService.BridgeProbeOverride = (info, token) => System.Threading.Tasks.Task.FromResult("ok");
+        ClaudeQuotaUiFixture.Install();
         try
         {
             Check(SynchronizationContext.Current == null, "Async flow tests start without a UI synchronization context");
@@ -524,5 +525,6 @@ internal static class ConnectionFlowTests
             Console.Error.WriteLine("Connection flow test failed: " + ex);
             return 1;
         }
+        finally { ClaudeQuotaService.ReadOverride = null; }
     }
 }

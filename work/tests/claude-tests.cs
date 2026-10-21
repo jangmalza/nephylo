@@ -18,6 +18,7 @@ public static class ClaudeTests
     static void Reject(Action action, string description) { bool rejected = false; try { action(); } catch { rejected = true; } Check(rejected, description); }
     public static int Main(string[] args)
     {
+        if (args.Length > 0 && args[0] == "--fake-quota") return ClaudeQuotaTests.Fake(args.Skip(1).ToArray());
         if (args.Length == 1 && args[0] == "--claude-bridge-check") {
             if (Environment.GetEnvironmentVariable("NEPHYLO_CLAUDE_TEST_PROBE_STATUS") == "storage") { Console.WriteLine("nephylo-claude-bridge-storage"); return 3; }
             Console.WriteLine("nephylo-claude-bridge-v1"); return 0;
@@ -176,6 +177,7 @@ public static class ClaudeTests
             TestWindowsConfigurationDirectory(root, executable, valid, now);
             TestBridgeDiagnostics(executable, valid);
             TestWslBridge(root, executable, valid, now);
+            count += ClaudeQuotaTests.Run(root);
             string liveDistribution = Environment.GetEnvironmentVariable("NEPHYLO_CLAUDE_TEST_WSL");
             if (!String.IsNullOrEmpty(liveDistribution)) TestLiveWsl(liveDistribution, executable);
             Console.WriteLine("Claude bridge tests passed: " + count);

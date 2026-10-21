@@ -139,18 +139,7 @@ $testNames = @(
     'membership-client-tests',
     'membership-ui-tests',
     'widget-ui-tests',
-    'studio-tests',
-    'studio-development-tests',
-    'studio-routing-tests',
-    'studio-navigation-tests',
-    'studio-message-tests',
-    'studio-quota-tests',
-    'studio-handoff-tests',
-    'studio-provider-tests',
-    'studio-claude-tests',
-    'studio-gemini-api-tests',
-    'studio-gemini-cli-tests',
-    'studio-gemini-provider-tests',
+    'widget-isolation-tests',
     'widget-presentation-tests',
     'localization-tests',
     'startup-refresh-tests',
@@ -224,6 +213,8 @@ try {
     foreach ($name in $testNames) {
         if ($name -eq 'app-icon-tests') {
             Invoke-CiStep $name (Join-Path $PSScriptRoot ($name + '.ps1')) @('-IconPath', (Join-Path $buildDirectory 'widget.ico'))
+        } elseif ($name -eq 'widget-isolation-tests') {
+            Invoke-CiStep $name (Join-Path $PSScriptRoot ($name + '.ps1')) @('-Executable', (Join-Path $buildDirectory 'UsageWidget.exe'))
         } else {
             Invoke-CiStep $name (Join-Path $PSScriptRoot ($name + '.ps1'))
         }
