@@ -24,6 +24,8 @@ namespace UsageWidget
         [STAThread]
         public static void Main(string[] args)
         {
+            // Route development requests before any widget installer, migration or bridge work.
+            if (StudioDevelopmentMode.IsRequested(args)) { Environment.ExitCode = StudioDevelopmentMode.Run(args); return; }
             if (AutoUpdateInstaller.TryRunWorker(args)) return;
             if (args.Contains("--install")) { WidgetInstallation.InstallInteractive(null,false); return; }
             if (args.Length == 1 && args[0] == "--claude-bridge-check") {
@@ -182,6 +184,7 @@ namespace UsageWidget
             timer.Start();
             StateChanged += (s, e) => { if (WindowState == WindowState.Minimized) { Hide(); WindowState = WindowState.Normal; } };
             Closing += async (s, e) => {
+                if (studioWindow != null && !studioWindow.TryCloseForOwner()) { e.Cancel = true; return; }
                 if (!shutdownFlushed && !demo) {
                     e.Cancel = true;
                     if (exiting) { e.Cancel = true; return; }
@@ -204,6 +207,7 @@ namespace UsageWidget
                 SystemParameters.StaticPropertyChanged -= MotionPreferenceChanged; StopWidgetMotion();
                 System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged -= NetworkAvailabilityChanged;
                 CloseDashboard();
+                if (studioWindow != null) studioWindow.Close();
                 if (settingsWindow != null) settingsWindow.Close();
                 if (servicesWindow != null) servicesWindow.Close();
                 if (historyWindow != null) historyWindow.Close();
@@ -584,6 +588,7 @@ namespace UsageWidget
             var menu = new Forms.ContextMenuStrip();
             menu.Items.Add("위젯 열기", null, (s,e) => Dispatcher.BeginInvoke(new Action(Reveal)));
             menu.Items.Add("대시보드 열기", null, (s,e) => Dispatcher.BeginInvoke(new Action(OpenDashboard)));
+            menu.Items.Add("Nephylo ADE 열기", null, (s,e) => Dispatcher.BeginInvoke(new Action(OpenStudio)));
             menu.Items.Add("새로고침", null, (s,e) => Dispatcher.BeginInvoke(new Action(async () => { if (!demo) await RefreshAsync(); })));
             menu.Items.Add("사용 이력", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenUsageHistory(); })));
             menu.Items.Add("주간 요약", null, (s,e) => Dispatcher.BeginInvoke(new Action(() => { Reveal(); OpenWeeklySummary(); })));

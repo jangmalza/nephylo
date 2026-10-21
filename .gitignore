@@ -5,6 +5,7 @@
 !/work/assets/
 !/work/tests/
 !/work/build.ps1
+!/work/run-ade-dev.ps1
 !/work/build-setup.ps1
 !/work/compose-notices.ps1
 !/work/installer/

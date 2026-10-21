@@ -144,8 +144,14 @@ internal static class OnboardingTests
             Check(Elements<ScrollViewer>(guide).Any(view => view.VerticalScrollBarVisibility == ScrollBarVisibility.Auto),"Short/high-DPI work areas keep instructions scrollable and footer separate");
             guide.Close(); L.Language = "ko";
             Check(!window.IsLoaded && !window.IsVisible,"No real account requests or visible windows were started by the hidden WPF fixture");
+            ((Task)Call(window,"FlushUsageTrackingAsync")).GetAwaiter().GetResult();
+            Check(File.Exists(Path.Combine(root,"usage-journal.json")),"The synthetic reading is durably saved before fixture teardown");
+            Check(!Directory.GetFiles(root,".usage-journal.*.tmp").Any(),"The journal writer has released its temporary file before cleanup");
         } finally {
             if (window != null) {
+                // This fixture bypasses the normal asynchronous Closing flush.
+                // Join its background journal writer before deleting its data.
+                ((Task)Call(window,"FlushUsageTrackingAsync")).GetAwaiter().GetResult();
                 Set(window,"shutdownFlushed",true); Field<DispatcherTimer>(window,"timer").Stop(); window.Close();
                 Field<CodexService>(window,"codex").Dispose(); Field<Forms.NotifyIcon>(window,"tray").Dispose();
             }

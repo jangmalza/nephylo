@@ -57,6 +57,7 @@ test('export neutralizes account configuration and refuses an existing output',(
 });
 
 test('unknown source formats fail explicitly while private data remain excluded',()=>{
+ assert.equal(publicSourcePath('work/run-ade-dev.ps1'),true,'Reviewed ADE development launcher stays with exported source');
  for(const name of ['work/src/View.xaml','work/assets/prices.json','work/tests/fixture.json','work/new-helper.ps1','package.json','resources/NewView.resx'])assert.equal(exclusionReason(name),'unclassified-source');
  for(const name of ['work/tests/auth.json','outputs/backup.json','work/website/dist/downloads/Nephylo-Setup.exe'])assert.equal(exclusionReason(name),'private-or-generated');
  for(const name of ['work/configure-membership.ps1','work/package-release.ps1'])assert.equal(exclusionReason(name),'operational-or-private-document');

@@ -139,7 +139,7 @@ namespace UsageWidget
             return new DataTemplate { VisualTree = text };
         }
 
-        private static void ApplyManagementReadingStyles(ResourceDictionary resources)
+        internal static void ApplyManagementReadingStyles(ResourceDictionary resources)
         {
             // Scope input scale to management dialogs, not the compact widget.
             foreach (Type type in new[] { typeof(TextBox),typeof(PasswordBox),typeof(ComboBox),typeof(ComboBoxItem) }) {

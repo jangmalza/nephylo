@@ -270,7 +270,7 @@ namespace UsageWidget
             </ResourceDictionary>");
         }
 
-        private static void ApplyDialogTheme(Window dialog)
+        internal static void ApplyDialogTheme(Window dialog)
         {
             // Keep the native title bar and its standard keyboard/window controls.
             Action update = () => {

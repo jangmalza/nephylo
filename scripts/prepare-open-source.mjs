@@ -8,7 +8,7 @@ import {privatePath} from '../.github/scripts/scan-secrets.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const top=new Set(['LICENSE','THIRD-PARTY-NOTICES.txt','CONTRIBUTING.md','.gitattributes','.gitignore','.gitleaks.toml']);
 const githubScripts=new Set(['scan-secrets.mjs','secret-policy.test.mjs','check-ci-result.mjs','run-node-checks.mjs']);
-const workFiles=new Set(['build.ps1','build-setup.ps1','compose-notices.ps1','generate-app-icon.ps1','generate-service-icons.ps1','Install.cmd','sign-release.ps1','README.txt','UPDATE-RELEASES.md']);
+const workFiles=new Set(['build.ps1','run-ade-dev.ps1','build-setup.ps1','compose-notices.ps1','generate-app-icon.ps1','generate-service-icons.ps1','Install.cmd','sign-release.ps1','README.txt','UPDATE-RELEASES.md']);
 const operationalHelpers=new Set(['work/configure-membership.ps1','work/package-release.ps1']);
 const publicImages=new Set(['docs/images/widget.png','docs/images/minibar.png','docs/images/dashboard.png','docs/images/history.png']);
 const publicDocs=new Map([['docs/public/RELEASING.md','docs/RELEASING.md'],['docs/public/UPDATE-RELEASES.md','work/UPDATE-RELEASES.md'],['docs/public/WEBSITE.md','work/website/README.md'],['docs/public/MEMBERSHIP.md','work/membership/README.md']]);

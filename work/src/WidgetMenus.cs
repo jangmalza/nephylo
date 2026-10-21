@@ -236,6 +236,8 @@ namespace UsageWidget
             };
             var dashboard = WidgetMenuItem("대시보드 열기", "\uE80F");
             dashboard.Click += (s,e) => OpenDashboard(); menu.Items.Add(dashboard);
+            var studio = WidgetMenuItem("Nephylo ADE 열기", "\uE8F2");
+            studio.Click += (s,e) => OpenStudio(); menu.Items.Add(studio);
             var history = WidgetMenuItem("사용 이력", "\uE9D9");
             history.Click += (s,e) => OpenUsageHistory(); menu.Items.Add(history);
             var weekly = WidgetMenuItem("주간 요약", "\uE9D9");
