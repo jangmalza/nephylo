@@ -1,6 +1,6 @@
-import { serviceGuides, faqItems } from './guides.js?v=20261015-v12520-free';
-import { guideTranslations, faqTranslations } from './guides-en.js?v=20261015-v12520-free';
-import { mainTranslations } from './main-translations.js?v=20261016-v12522';
+import { serviceGuides, faqItems } from './guides.js?v=20261021-v12533';
+import { guideTranslations, faqTranslations } from './guides-en.js?v=20261021-v12533';
+import { mainTranslations } from './main-translations.js?v=20261021-v12533';
 import { getLanguage, registerTranslations, t, onLanguageChange, translateDocument } from './i18n.js';
 import { initScrollReveal } from './scroll-reveal.js?v=20261012-reveal';
 import { initPowerShellInstall } from './powershell-install.js?v=20261013-ps-install';

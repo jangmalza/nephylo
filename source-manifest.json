@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "sourceCommit": "33088e4d9bc2befcccca53509041f4d9fd96695f",
+  "sourceCommit": "e2ee62ac265b876ffbf93713dc75cce9822d1028",
   "includesWorkingTreeChanges": false,
   "gitHistoryIncluded": false,
   "releaseBinariesIncluded": false,
@@ -93,8 +93,8 @@
     },
     {
       "path": "docs/PUBLIC-README.md",
-      "bytes": 23398,
-      "sha256": "6dc6e00dcf3357f79886a48a99f0826a2a25763f76a1d7736d689ae706369d88"
+      "bytes": 23325,
+      "sha256": "01d638fb38ab913a3502bc24f209ee8116607ed89b53d2135fe6b29bde62e6eb"
     },
     {
       "path": "docs/public/MEMBERSHIP.md",
@@ -119,7 +119,7 @@
     {
       "path": "docs/RELEASING.md",
       "bytes": 2067,
-      "sha256": "b927e86eab13b90ce0298d69d8310af841f31d7fd83bccaf46b779a571241a72"
+      "sha256": "2df827f80aae60ae2a646975fb415662d17a30f2da15b9f449cfbbae03115137"
     },
     {
       "path": "LICENSE",
@@ -128,8 +128,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 23365,
-      "sha256": "bc84be8478020773d20df25e27959ca9bea8dbd8ac387259a76bea450572edb0"
+      "bytes": 23292,
+      "sha256": "d4f3c31fefdfe259083548b388e18e17fa2bed8adc0529c2497c1874da6ee929"
     },
     {
       "path": "scripts/check-public-source.mjs",
@@ -253,8 +253,8 @@
     },
     {
       "path": "work/installer/README.md",
-      "bytes": 6519,
-      "sha256": "4aa6d2f02142b468e6d5a85db67e80b5c165a2bbd85335e91a6dcad4327962c2"
+      "bytes": 6509,
+      "sha256": "1aa104195d16cd749230e2c7dbdd17b1607c2cc95a15c2214f8666d143abfe98"
     },
     {
       "path": "work/membership/.gitignore",
@@ -443,8 +443,8 @@
     },
     {
       "path": "work/README.txt",
-      "bytes": 23365,
-      "sha256": "bc84be8478020773d20df25e27959ca9bea8dbd8ac387259a76bea450572edb0"
+      "bytes": 23292,
+      "sha256": "d4f3c31fefdfe259083548b388e18e17fa2bed8adc0529c2497c1874da6ee929"
     },
     {
       "path": "work/sign-release.ps1",
@@ -464,7 +464,7 @@
     {
       "path": "work/src/AssemblyInfo.cs",
       "bytes": 313,
-      "sha256": "e54f3883df053eaf4e2e6768bcc28aab5bfa0d4fe5e9d722eeb7839f86683f10"
+      "sha256": "add98161da32645702530ab4c72c1c8cd563c5e5c898b434cdddcdf382a972f6"
     },
     {
       "path": "work/src/AutoUpdateClient.cs",
@@ -808,8 +808,8 @@
     },
     {
       "path": "work/tests/auto-update-installation-flow-tests.ps1",
-      "bytes": 14702,
-      "sha256": "4075a8d9044fb51a3f89b147dd5aeb0ec8a0a7c5c344e3b05e3939c657e89cd4"
+      "bytes": 14989,
+      "sha256": "99ed539b08332961d42e4f5f73fdab5ebde42403b1226436bebfbbe8817009ee"
     },
     {
       "path": "work/tests/auto-update-installer-tests.cs",
@@ -1293,8 +1293,8 @@
     },
     {
       "path": "work/tests/setup-tests.ps1",
-      "bytes": 12587,
-      "sha256": "2450b5062e4f6eb5cd05ca2d6d4811ee4b47369d32e2816aa1cff9d78339b3ba"
+      "bytes": 12878,
+      "sha256": "4fd03a945c899cd88041a05448c7ba210822128991d9a233845ceb0870e25b7c"
     },
     {
       "path": "work/tests/startup-refresh-tests.cs",
@@ -1603,8 +1603,8 @@
     },
     {
       "path": "work/website/dist/app.js",
-      "bytes": 11765,
-      "sha256": "c7d0f04f6c973d708bcf19c6845e95b4ce3e4d90109b87bc3b89abfa21168fb9"
+      "bytes": 11755,
+      "sha256": "3f7211e511c68604c16820490b539b0a5f56457c74b740751028d8d43f337440"
     },
     {
       "path": "work/website/dist/assets/app-icon.svg",
@@ -1669,17 +1669,17 @@
     {
       "path": "work/website/dist/downloads/release.json",
       "bytes": 313,
-      "sha256": "7f1f16e38abda482b8be4336f7a4c111db71cbeca7b461cc6a8830993c1145c9"
+      "sha256": "68a5597048a4e74c94e15369cb436d1672f4a25edcd3ba3f8716733f4168228f"
     },
     {
       "path": "work/website/dist/downloads/SHA256SUMS.txt",
       "bytes": 355,
-      "sha256": "682b4040da31822b191dcfc55bd0e1780f9978d9046626dcaac5a532065ecfdb"
+      "sha256": "5d86643044e2835fc4636ed2bf282cd4b13b016cc1d20cb7dc9741a2186bbaee"
     },
     {
       "path": "work/website/dist/downloads/update.json",
       "bytes": 613,
-      "sha256": "bd0b3f639cf3e595024a6b6240bd86dc19c532bd14d7357c98291a1bfa1c47f5"
+      "sha256": "c6492bdd4e9e57d7763dde3dd32279c20f7e826f3e8fd6d8f834ed2d052c65f0"
     },
     {
       "path": "work/website/dist/favicon.ico",
@@ -1688,13 +1688,13 @@
     },
     {
       "path": "work/website/dist/guides-en.js",
-      "bytes": 18027,
-      "sha256": "0888d23bfe4af2e3c05616770c7721a6abfda19bfa0505991f147fa391166b45"
+      "bytes": 18185,
+      "sha256": "aeb522e7719909f2947a748661d8801899faf238fa3944e41c9d8e82db35072f"
     },
     {
       "path": "work/website/dist/guides.js",
-      "bytes": 21424,
-      "sha256": "7f22966f460dd83f6cfb92c51cd3b14bc81462abed1e8c9b443e44ae4cd34d98"
+      "bytes": 21598,
+      "sha256": "393f7837504ebb36af223f3d819af53b7df4ae58c567b4aa1a22cbb289119500"
     },
     {
       "path": "work/website/dist/i18n.js",
@@ -1703,13 +1703,13 @@
     },
     {
       "path": "work/website/dist/index.html",
-      "bytes": 48869,
-      "sha256": "d7f48ea2868f7202347552e672624102587b6e3072a3ecd45d2a74a224cc151e"
+      "bytes": 49328,
+      "sha256": "9e5e7db4bc74ffdfe88cd4b665fd37ba37cf6c800c5e7e7ff138243199f6ca1b"
     },
     {
       "path": "work/website/dist/main-translations.js",
-      "bytes": 60228,
-      "sha256": "fd6d2be0f9574f1631d505e362ef296ddb17807a599864c8b7c2f72447d42c2b"
+      "bytes": 60942,
+      "sha256": "211c8f46253ac93b667081513f69ad6cc01583e6ae38b49eafff69c5a5e1b2fe"
     },
     {
       "path": "work/website/dist/powershell-install.js",

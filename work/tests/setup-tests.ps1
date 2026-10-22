@@ -1,8 +1,9 @@
-param([string]$Version = '1.18.1')
+param([string]$Version = '1.18.1', [string]$InnoCompiler = $env:INNO_SETUP_COMPILER)
 $ErrorActionPreference = 'Stop'
 $work = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $workspace = Split-Path -Parent $work
-$compiler = Join-Path $work 'tools/innosetup-7.1.0/ISCC.exe'
+$compiler = if ($InnoCompiler) { (Resolve-Path -LiteralPath $InnoCompiler -ErrorAction Stop).Path } else { Join-Path $work 'tools/innosetup-7.1.0/ISCC.exe' }
+if (-not (Test-Path -LiteralPath $compiler -PathType Leaf)) { throw 'Inno Setup compiler missing. Use -InnoCompiler or INNO_SETUP_COMPILER.' }
 $script = Join-Path $work 'installer/Nephylo.iss'
 $id = 'regression-' + [Guid]::NewGuid().ToString('N').Substring(0,12)
 $fixture = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot ('setup-isolated-' + $id)))

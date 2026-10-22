@@ -53,20 +53,20 @@ export const guideTranslations = [
   {
     "id": "claude",
     "name": "Claude",
-    "method": "From Claude Code",
-    "summary": "Show 5-hour and weekly limits received from the Claude Code Pro/Max status line. Values update after a new response. If you only use the website, you can record values manually.",
+    "method": "Claude Code automatic queries",
+    "summary": "Query 5-hour and weekly remaining quotas without a new conversation using official Claude Code 2.1.304 or later and a Pro/Max sign-in. Legacy receipts and manual records are preserved.",
     "steps": [
-      "Install Claude Code in Windows or your chosen WSL distribution and sign in with a Pro or Max account.",
-      "In the widget, open + → Claude subscription → “Connection environment”, choose Windows or an automatically discovered WSL distribution, and select “Connect Claude Code”.",
-      "Reopen Claude Code and use it normally. After the next response, select “Check received data”."
+      "Install official Claude Code 2.1.304 or later in Windows or your chosen WSL distribution and sign in with a Pro or Max account.",
+      "In the widget, open + → Claude → “Connection environment”, choose Windows or an automatically discovered WSL distribution, and select “Connect Claude Code”.",
+      "Select “Check remaining usage”, then save. Widget refresh and automatic polling update the values without sending a new Claude conversation."
     ],
     "troubleshooting": [
-      "“Waiting for first reading” means no data has arrived. “Received · Limits unavailable” means data arrived without 5-hour or weekly limits. Claude Free and API-key users can use manual records. Limits may also be absent before the first response.",
-      "Choose a custom Windows settings folder in Advanced. Leave it blank to use CLAUDE_CONFIG_DIR or the default folder. To keep an existing status line, forward the same JSON input to the copied receiver command, enable “Receive from existing status line”, then check received data. Your script is preserved.",
+      "If direct queries are unavailable, check your CLI version and Pro/Max sign-in. Free/API-key or web-only users can use manual records. Legacy “Waiting for first reading” and “Received · Limits unavailable” states are different from sign-in failures.",
+      "Choose a custom Windows settings folder in Advanced. Leave it blank to use CLAUDE_CONFIG_DIR or the default folder. To keep an existing status line, forward the same JSON input to the copied receiver command, enable “Receive from existing status line”, then inspect the received values. Your script is preserved.",
       "WSL uses ~/.claude/settings.json for the default Linux user and requires Windows interoperability. Custom WSL settings folders are not supported. If a legacy lock remains, close the previous widget and connection tasks before checking its state.",
-      "Usage from other devices or the web is reflected in the next reading. Check the last received time alongside the values."
+      "The next query can reflect usage from other devices or the web. Refresh stale values and check the last query or receipt time alongside the reading."
     ],
-    "docsLabel": "Claude Code status-line guide"
+    "docsLabel": "Legacy Claude Code status-line guide"
   },
   {
     "id": "gemini",
@@ -200,7 +200,7 @@ export const faqTranslations = [
   },
   {
     "question": "Does every service update in real time?",
-    "answer": "Codex, ElevenLabs, OpenAI API and Higgsfield web are checked at scheduled intervals. Claude updates after a new limit arrives from Claude Code. Gemini, Cursor and Higgsfield API are recorded manually. Check the last checked time alongside each value."
+    "answer": "Codex, ElevenLabs, OpenAI API, Higgsfield web and supported Claude Code connections are queried at scheduled intervals. Legacy Claude receipts update after new quota data arrives. Gemini, Cursor and Higgsfield API use manual records. Check the last checked time alongside each value."
   },
   {
     "question": "Can I view Higgsfield web credits and API balance together?",

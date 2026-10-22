@@ -56,20 +56,20 @@ export const serviceGuides = [
   {
     "id": "claude",
     "name": "Claude",
-    "method": "Claude Code 수신",
-    "summary": "Claude Code Pro·Max의 상태 표시줄에서 받은 5시간·주간 한도를 보여줍니다. 새 응답을 받은 뒤 갱신되며, 웹만 사용한다면 수동으로 기록할 수 있습니다.",
+    "method": "Claude Code 자동 조회",
+    "summary": "공식 Claude Code 2.1.304 이상과 Pro·Max 로그인으로 새 대화 없이 5시간·주간 잔여량을 조회합니다. 기존 응답 수신과 수동 기록도 유지합니다.",
     "steps": [
-      "Windows 또는 사용할 WSL 배포판에 Claude Code를 설치하고 Pro 또는 Max 계정으로 로그인하세요.",
-      "위젯의 + → Claude 개인 구독 → ‘연결 환경’에서 Windows 또는 자동 검색된 WSL 배포판을 선택하고 ‘Claude Code 연결’을 누르세요.",
-      "Claude Code를 다시 열어 평소처럼 사용하고, 다음 응답을 받은 뒤 ‘수신 확인’을 누르세요."
+      "Windows 또는 사용할 WSL 배포판에 공식 Claude Code 2.1.304 이상을 설치하고 Pro 또는 Max 계정으로 로그인하세요.",
+      "위젯의 + → Claude → ‘연결 환경’에서 Windows 또는 자동 검색된 WSL 배포판을 선택하고 ‘Claude Code 연결’을 누르세요.",
+      "‘잔여량 조회’로 확인한 뒤 저장하세요. 이후 위젯 새로고침·자동 조회로 갱신하며 Claude와 새 대화를 할 필요가 없습니다."
     ],
     "troubleshooting": [
-      "‘첫 수신 대기’는 데이터가 아직 도착하지 않은 상태입니다. ‘수신됨 · 한도 미제공’은 데이터는 받았지만 5시간·주간 한도가 없는 상태입니다. Claude Free·API 키 사용자는 수동 기록을 이용하세요. 첫 응답 전에도 한도가 없을 수 있습니다.",
-      "Windows 별도 설정 폴더는 고급 연결에서 선택합니다. 비워 두면 CLAUDE_CONFIG_DIR 또는 기본 폴더를 사용합니다. 기존 상태 표시줄이 있다면 수신 명령에 같은 JSON을 전달하도록 연결하고 ‘기존 상태 표시줄에서 수신’을 체크한 뒤 수신 확인을 누르세요. 기존 스크립트는 변경하지 않습니다.",
+      "직접 조회가 지원되지 않으면 CLI 버전과 Pro·Max 로그인을 확인하세요. Claude Free·API 키 계정이나 웹만 사용하는 경우에는 수동 기록을 이용할 수 있습니다. 기존 응답 수신 방식의 ‘첫 수신 대기’와 ‘수신됨 · 한도 미제공’은 로그인 실패와 구분합니다.",
+      "Windows 별도 설정 폴더는 고급 연결에서 선택합니다. 비워 두면 CLAUDE_CONFIG_DIR 또는 기본 폴더를 사용합니다. 기존 상태 표시줄이 있다면 수신 명령에 같은 JSON을 전달하도록 연결하고 ‘기존 상태 표시줄에서 수신’을 체크한 뒤 수신된 값을 확인하세요. 기존 스크립트는 변경하지 않습니다.",
       "WSL은 배포판 기본 사용자의 ~/.claude/settings.json에 연결합니다. Windows 앱 실행(interop)이 켜져 있어야 합니다. WSL의 별도 설정 폴더는 지원하지 않습니다. 이전 버전의 잠금이 남았다면 이전 위젯과 연결 작업을 종료한 뒤 잠금 상태를 확인하세요.",
-      "다른 기기나 웹의 사용은 다음 수신 때 반영됩니다. 화면의 마지막 수신 시각을 함께 확인하세요."
+      "다른 기기나 웹에서 사용한 잔여량도 다음 조회로 확인합니다. 값이 오래됐다면 위젯을 새로고침하고 마지막 조회·수신 시각을 함께 확인하세요."
     ],
-    "docsLabel": "Claude Code 상태 표시줄 안내",
+    "docsLabel": "기존 Claude Code 상태 표시줄 안내",
     "docsUrl": "https://code.claude.com/docs/en/statusline"
   },
   {
@@ -208,7 +208,7 @@ export const faqItems = [
   },
   {
     "question": "모든 서비스가 실시간으로 갱신되나요?",
-    "answer": "Codex·ElevenLabs·OpenAI API·Higgsfield 웹은 정해진 간격으로 조회합니다. Claude는 Claude Code에서 새 한도를 수신한 뒤 갱신되며, Gemini·Cursor·Higgsfield API는 직접 기록합니다. 값과 함께 마지막 확인 시각을 확인하세요."
+    "answer": "Codex·ElevenLabs·OpenAI API·Higgsfield 웹과 지원되는 Claude Code는 정해진 간격으로 조회합니다. 기존 Claude 응답 수신 방식은 새 한도가 도착한 뒤 갱신되며, Gemini·Cursor·Higgsfield API는 직접 기록합니다. 값과 함께 마지막 확인 시각을 확인하세요."
   },
   {
     "question": "Higgsfield 웹 크레딧과 API 잔액을 함께 볼 수 있나요?",

@@ -1,4 +1,6 @@
 export const mainTranslations = {
+  "위젯 전용 릴리스와 Claude 직접 조회": "Widget-only release and direct Claude quota queries",
+  "Claude Code Pro·Max 연결은 공식 CLI 2.1.304 이상에서 새 대화 없이 잔여량을 조회합니다. AI 개발 환경은 별도 Nephylo ADE 제품으로 분리하고, 기존 흑백 위젯·미니바·대시보드와 연결·설정·사용 이력, 무료 기능을 유지합니다.": "Claude Code Pro/Max connections can query remaining quotas without a new conversation using official CLI 2.1.304 or later. The AI development environment is a separate Nephylo ADE product. Existing monochrome widget, minibar, dashboard, connections, settings, usage history and free features are preserved.",
   "무료 이용 안내": "Free access guide",
   "조용한 새로고침과 일정·요약 표시 개선": "Quiet refreshes and clearer schedules and summaries",
   "예약된 자동 새로고침 중에도 기존 잔량을 유지해 화면 깜빡임을 줄였습니다. 하단 상태 표시를 간결하게 정리하고, 168시간 초기화 일정과 분석·주간 요약의 중복 제목 표시를 수정했습니다.": "Scheduled automatic refreshes now keep the existing balance visible to reduce flicker. The footer status display is simpler, and we fixed the 168-hour reset schedule and duplicate headings in analysis and weekly summaries.",

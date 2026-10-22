@@ -6,7 +6,7 @@
 
 컴파일러의 공식 배포본 전체를 `work/tools/innosetup-7.1.0/`에 준비합니다. `ISCC.exe`, 기본 언어 파일, `Languages/Korean.isl`이 필요합니다. 도구 사용은 해당 배포본의 라이선스 안내를 따릅니다. 이 프로젝트의 사용자 설치 파일이나 Git에 도구를 포함하지 않습니다.
 
-`build-setup.ps1`은 `-Compiler` → `INNO_SETUP_COMPILER` → 위 기본 경로 순서로 컴파일러를 선택합니다. 현재 두 설치 회귀 스크립트는 기본 경로를 직접 사용하므로 테스트하려면 그 위치도 준비해야 합니다. 새 clone에 필요한 고지문 준비 방법은 [새 PC 준비](../../docs/RELEASING.md#1-새-pc에서-준비할-것)에 있습니다.
+`build-setup.ps1`은 `-Compiler` → `INNO_SETUP_COMPILER` → 위 기본 경로 순서로 컴파일러를 선택합니다. 두 설치 회귀 스크립트도 `-InnoCompiler` → `INNO_SETUP_COMPILER` → 같은 기본 경로 순서로 선택합니다. 새 clone에 필요한 고지문 준비 방법은 [새 PC 준비](../../docs/RELEASING.md#1-새-pc에서-준비할-것)에 있습니다.
 
 | 컴파일 정의 | 의미 |
 | --- | --- |
